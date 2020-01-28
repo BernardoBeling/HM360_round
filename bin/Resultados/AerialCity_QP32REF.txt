@@ -1,0 +1,149 @@
+
+HM software: Encoder Version [16.16] (including RExt)[Linux][GCC 7.4.0][64 bit] 
+
+CompactCodingFPFormat is automatically disabled for source video because it is only supported for OHP and ISP
+CompactCodingFPFormat is automatically disabled for output video because it is only supported for OHP and ISP
+
+Input          File                    : /home/bernardo/videos/360/AerialCity_3840x1920_30fps_8bit_420_erp.yuv
+Bitstream      File                    : AerialCity_QP32REF.bin
+Reconstruction File                    : rec.yuv
+Real     Format                        : 3328x1664 30Hz
+Internal Format                        : 3328x1664 30Hz
+Sequence PSNR output                   : Linear average only
+Sequence MSE output                    : Disabled
+Frame MSE output                       : Disabled
+MS-SSIM output                         : Disabled
+Cabac-zero-word-padding                : Enabled
+Frame/Field                            : Frame based coding
+Frame index                            : 0 - 19 (20 frames)
+Profile                                : main10
+CU size / depth / total-depth          : 64 / 4 / 4
+RQT trans. size (min / max)            : 4 / 32
+Max RQT depth inter                    : 3
+Max RQT depth intra                    : 3
+Min PCM size                           : 8
+Motion search range                    : 64
+Intra period                           : 1
+Decoding refresh type                  : 1
+QP                                     : 32
+Max dQP signaling depth                : 0
+Cb QP Offset                           : 0
+Cr QP Offset                           : 0
+QP adaptation                          : 0 (range=0)
+GOP size                               : 1
+Input bit depth                        : (Y:8, C:8)
+MSB-extended bit depth                 : (Y:8, C:8)
+Internal bit depth                     : (Y:10, C:10)
+PCM sample bit depth                   : (Y:8, C:8)
+Intra reference smoothing              : Enabled
+diff_cu_chroma_qp_offset_depth         : -1
+extended_precision_processing_flag     : Disabled
+implicit_rdpcm_enabled_flag            : Disabled
+explicit_rdpcm_enabled_flag            : Disabled
+transform_skip_rotation_enabled_flag   : Disabled
+transform_skip_context_enabled_flag    : Disabled
+cross_component_prediction_enabled_flag: Disabled
+high_precision_offsets_enabled_flag    : Disabled
+persistent_rice_adaptation_enabled_flag: Disabled
+cabac_bypass_alignment_enabled_flag    : Disabled
+log2_sao_offset_scale_luma             : 0
+log2_sao_offset_scale_chroma           : 0
+Cost function:                         : Lossy coding (default)
+RateControl                            : 0
+WPMethod                               : 0
+Max Num Merge Candidates               : 5
+
+TOOL CFG: IBD:1 HAD:1 RDQ:1 RDQTS:1 RDpenalty:0 LQP:0 SQP:0 ASR:0 MinSearchWindow:8 RestrictMESampling:0 FEN:1 ECU:0 FDM:1 CFM:0 ESD:0 RQT:1 TransformSkip:1 TransformSkipFast:1 TransformSkipLog2MaxSize:2 Slice: M=0 SliceSegment: M=0 CIP:0 SAO:1 PCM:0 TransQuantBypassEnabled:0 WPP:0 WPB:0 PME:2  WaveFrontSynchro:0 WaveFrontSubstreams:1 ScalingList:0 TMVPMode:1 AQpS:0 SignBitHidingFlag:1 RecalQP:0
+
+-----360Lib software version [5.0]-----
+-----360 video parameters----
+SphereVideo:1
+InputGeometryType: Equirectangular 
+ChromaFormat:1 Resolution:3840x1920xF1 FPStructure:1x1 | Id_0(R_0)  | 
+Compact type: 0
+InputPERP: 0
+
+CodingGeometryType: Equirectangular 
+ChromaFormat:1 Resolution:3328x1664xF1 FPStructure:1x1 | Id_0(R_0)  | 
+Compact type: 0
+CodingPERP: 0
+
+Packed frame resolution: 3328x1664 (Input face resolution:3328x1664)
+Interpolation method for luma: 5, interpolation method for chroma: 4
+ChromaSampleLocType: 2
+Input ChromaFormatIDC: 1; Internal ChromaFormatIDC: 1, ChromaResample: 0; Output ChromaFormatIDC: 1
+Internal bit depth for projection conversion: 10, output bit depth from pejction conversion: 10
+
+End to end S-PSNR-NN is enabled; SphFile file: ../cfg/cfg-360Lib/360Lib/sphere_655362.txt
+Codec S-PSNR-NN is enabled; SphFile file: ../cfg/cfg-360Lib/360Lib/sphere_655362.txt
+WS-PSNR is enabled
+End to end WS-PSNR is enabled
+Static ViewPort PSNR calculation is not enabled!
+ViewPort parameters for dynamic ViewPort PSNR calculation:
+Number of viewports: 2, Resolutoin:856x856
+Dyanmic viewport 0, hFOV:75.00, vFOV:75.00
+Start viewport setting(POC_0): -45.00 -15.00; End viewport setting(POC_299): 45.00 15.00
+Dyanmic viewport 1, hFOV:75.00, vFOV:75.00
+Start viewport setting(POC_0): 77.00 -54.00; End viewport setting(POC_299): 167.00 -24.00
+Cross-format S-PSNR-NN is enabled; SphFile file: ../cfg/cfg-360Lib/360Lib/sphere_655362.txt
+Cross-format CPP-PSNR is enabled
+Rotation in 1/100 degrees: (yaw:0  pitch:0  roll:0)
+-----360 video parameters----
+
+
+Non-environment-variable-controlled macros set as follows: 
+
+                                RExt__DECODER_DEBUG_BIT_STATISTICS =   0
+                                      RExt__HIGH_BIT_DEPTH_SUPPORT =   0
+                            RExt__HIGH_PRECISION_FORWARD_TRANSFORM =   0
+                                        O0043_BEST_EFFORT_DECODING =   0
+                                         ME_ENABLE_ROUNDING_OF_MVS =   1
+
+                   Input ChromaFormatIDC =   4:2:0
+       Output (internal) ChromaFormatIDC =   4:2:0
+
+POC    0 TId: 0 ( I-SLICE, nQP 32 QP 32 )     852248 bits [Y 38.2576 dB    U 43.3720 dB    V 42.9241 dB] [Y-WSPSNR 37.4191 dB   U-WSPSNR 42.8530 dB   V-WSPSNR 42.4150 dB] [Y-C_SPSNR_NN 37.4015 dB   U-C_SPSNR_NN 42.8505 dB   V-C_SPSNR_NN 42.4118 dB] [Y-E2ESPSNR_NN 37.1108 dB   U-E2ESPSNR_NN 42.5621 dB   V-E2ESPSNR_NN 42.1151 dB] [Y-E2EWSPSNR 37.1227 dB   U-E2EWSPSNR 42.5635 dB   V-E2EWSPSNR 42.1138 dB] [Y-PSNR_DYN_VP0 38.1230 dB   U-PSNR_DYN_VP0 43.6785 dB   V-PSNR_DYN_VP0 42.7757 dB] [Y-PSNR_DYN_VP1 37.8785 dB   U-PSNR_DYN_VP1 43.5550 dB   V-PSNR_DYN_VP1 42.8532 dB] [Y-CFSPSNR_NN 37.1108 dB    U-CFSPSNR_NN 42.5662 dB    V-CFSPSNR_NN 42.1143 dB] [Y-CFCPPPSNR 37.4509 dB   U-CFCPPPSNR 42.8952 dB   V-CFCPPPSNR 42.4500 dB] [ET    34 ] [L0 ] [L1 ]
+POC    1 TId: 0 ( I-SLICE, nQP 32 QP 32 )     863232 bits [Y 38.0377 dB    U 43.3270 dB    V 42.8560 dB] [Y-WSPSNR 37.2084 dB   U-WSPSNR 42.7954 dB   V-WSPSNR 42.3477 dB] [Y-C_SPSNR_NN 37.1949 dB   U-C_SPSNR_NN 42.7888 dB   V-C_SPSNR_NN 42.3467 dB] [Y-E2ESPSNR_NN 36.8805 dB   U-E2ESPSNR_NN 42.4949 dB   V-E2ESPSNR_NN 42.0550 dB] [Y-E2EWSPSNR 36.8986 dB   U-E2EWSPSNR 42.5034 dB   V-E2EWSPSNR 42.0455 dB] [Y-PSNR_DYN_VP0 38.0111 dB   U-PSNR_DYN_VP0 43.3876 dB   V-PSNR_DYN_VP0 42.6205 dB] [Y-PSNR_DYN_VP1 37.5923 dB   U-PSNR_DYN_VP1 43.5459 dB   V-PSNR_DYN_VP1 42.9411 dB] [Y-CFSPSNR_NN 36.8796 dB    U-CFSPSNR_NN 42.5014 dB    V-CFSPSNR_NN 42.0413 dB] [Y-CFCPPPSNR 37.2348 dB   U-CFCPPPSNR 42.8410 dB   V-CFCPPPSNR 42.3905 dB] [ET    34 ] [L0 ] [L1 ]
+POC    2 TId: 0 ( I-SLICE, nQP 32 QP 32 )     862496 bits [Y 38.0215 dB    U 43.3613 dB    V 42.9728 dB] [Y-WSPSNR 37.1857 dB   U-WSPSNR 42.8284 dB   V-WSPSNR 42.4274 dB] [Y-C_SPSNR_NN 37.1807 dB   U-C_SPSNR_NN 42.8230 dB   V-C_SPSNR_NN 42.4335 dB] [Y-E2ESPSNR_NN 36.8421 dB   U-E2ESPSNR_NN 42.5346 dB   V-E2ESPSNR_NN 42.1320 dB] [Y-E2EWSPSNR 36.8395 dB   U-E2EWSPSNR 42.5366 dB   V-E2EWSPSNR 42.1251 dB] [Y-PSNR_DYN_VP0 37.9406 dB   U-PSNR_DYN_VP0 43.4861 dB   V-PSNR_DYN_VP0 42.7288 dB] [Y-PSNR_DYN_VP1 37.6284 dB   U-PSNR_DYN_VP1 43.4991 dB   V-PSNR_DYN_VP1 42.9238 dB] [Y-CFSPSNR_NN 36.8422 dB    U-CFSPSNR_NN 42.5330 dB    V-CFSPSNR_NN 42.1300 dB] [Y-CFCPPPSNR 37.1918 dB   U-CFCPPPSNR 42.8755 dB   V-CFCPPPSNR 42.4685 dB] [ET    34 ] [L0 ] [L1 ]
+POC    3 TId: 0 ( I-SLICE, nQP 32 QP 32 )     860152 bits [Y 38.1188 dB    U 43.4272 dB    V 43.0443 dB] [Y-WSPSNR 37.2858 dB   U-WSPSNR 42.9048 dB   V-WSPSNR 42.5097 dB] [Y-C_SPSNR_NN 37.2726 dB   U-C_SPSNR_NN 42.9064 dB   V-C_SPSNR_NN 42.5126 dB] [Y-E2ESPSNR_NN 36.9333 dB   U-E2ESPSNR_NN 42.6066 dB   V-E2ESPSNR_NN 42.2109 dB] [Y-E2EWSPSNR 36.9579 dB   U-E2EWSPSNR 42.6161 dB   V-E2EWSPSNR 42.2085 dB] [Y-PSNR_DYN_VP0 38.0147 dB   U-PSNR_DYN_VP0 43.6232 dB   V-PSNR_DYN_VP0 42.7235 dB] [Y-PSNR_DYN_VP1 37.7185 dB   U-PSNR_DYN_VP1 43.5513 dB   V-PSNR_DYN_VP1 42.9590 dB] [Y-CFSPSNR_NN 36.9328 dB    U-CFSPSNR_NN 42.6181 dB    V-CFSPSNR_NN 42.2155 dB] [Y-CFCPPPSNR 37.3284 dB   U-CFCPPPSNR 42.9524 dB   V-CFCPPPSNR 42.5530 dB] [ET    34 ] [L0 ] [L1 ]
+POC    4 TId: 0 ( I-SLICE, nQP 32 QP 32 )     862528 bits [Y 38.0481 dB    U 43.4031 dB    V 42.9970 dB] [Y-WSPSNR 37.2281 dB   U-WSPSNR 42.8670 dB   V-WSPSNR 42.5015 dB] [Y-C_SPSNR_NN 37.2147 dB   U-C_SPSNR_NN 42.8619 dB   V-C_SPSNR_NN 42.5048 dB] [Y-E2ESPSNR_NN 36.8808 dB   U-E2ESPSNR_NN 42.5694 dB   V-E2ESPSNR_NN 42.2092 dB] [Y-E2EWSPSNR 36.8960 dB   U-E2EWSPSNR 42.5809 dB   V-E2EWSPSNR 42.2010 dB] [Y-PSNR_DYN_VP0 37.9870 dB   U-PSNR_DYN_VP0 43.6564 dB   V-PSNR_DYN_VP0 42.7937 dB] [Y-PSNR_DYN_VP1 37.6360 dB   U-PSNR_DYN_VP1 43.6216 dB   V-PSNR_DYN_VP1 43.0298 dB] [Y-CFSPSNR_NN 36.8805 dB    U-CFSPSNR_NN 42.5790 dB    V-CFSPSNR_NN 42.2086 dB] [Y-CFCPPPSNR 37.2703 dB   U-CFCPPPSNR 42.9141 dB   V-CFCPPPSNR 42.5468 dB] [ET    34 ] [L0 ] [L1 ]
+POC    5 TId: 0 ( I-SLICE, nQP 32 QP 32 )     861128 bits [Y 38.0992 dB    U 43.3867 dB    V 42.9601 dB] [Y-WSPSNR 37.2693 dB   U-WSPSNR 42.8598 dB   V-WSPSNR 42.4437 dB] [Y-C_SPSNR_NN 37.2680 dB   U-C_SPSNR_NN 42.8536 dB   V-C_SPSNR_NN 42.4448 dB] [Y-E2ESPSNR_NN 36.9372 dB   U-E2ESPSNR_NN 42.5696 dB   V-E2ESPSNR_NN 42.1473 dB] [Y-E2EWSPSNR 36.9370 dB   U-E2EWSPSNR 42.5700 dB   V-E2EWSPSNR 42.1409 dB] [Y-PSNR_DYN_VP0 38.0252 dB   U-PSNR_DYN_VP0 43.5416 dB   V-PSNR_DYN_VP0 42.7471 dB] [Y-PSNR_DYN_VP1 37.6758 dB   U-PSNR_DYN_VP1 43.5800 dB   V-PSNR_DYN_VP1 42.9001 dB] [Y-CFSPSNR_NN 36.9365 dB    U-CFSPSNR_NN 42.5595 dB    V-CFSPSNR_NN 42.1371 dB] [Y-CFCPPPSNR 37.3064 dB   U-CFCPPPSNR 42.9045 dB   V-CFCPPPSNR 42.4899 dB] [ET    34 ] [L0 ] [L1 ]
+POC    6 TId: 0 ( I-SLICE, nQP 32 QP 32 )     862144 bits [Y 38.0670 dB    U 43.3384 dB    V 42.9182 dB] [Y-WSPSNR 37.2327 dB   U-WSPSNR 42.8071 dB   V-WSPSNR 42.4157 dB] [Y-C_SPSNR_NN 37.2327 dB   U-C_SPSNR_NN 42.8007 dB   V-C_SPSNR_NN 42.4188 dB] [Y-E2ESPSNR_NN 36.8667 dB   U-E2ESPSNR_NN 42.4988 dB   V-E2ESPSNR_NN 42.0994 dB] [Y-E2EWSPSNR 36.8653 dB   U-E2EWSPSNR 42.5024 dB   V-E2EWSPSNR 42.0970 dB] [Y-PSNR_DYN_VP0 37.9768 dB   U-PSNR_DYN_VP0 43.4750 dB   V-PSNR_DYN_VP0 42.6806 dB] [Y-PSNR_DYN_VP1 37.6398 dB   U-PSNR_DYN_VP1 43.4892 dB   V-PSNR_DYN_VP1 42.8111 dB] [Y-CFSPSNR_NN 36.8658 dB    U-CFSPSNR_NN 42.4944 dB    V-CFSPSNR_NN 42.0901 dB] [Y-CFCPPPSNR 37.2686 dB   U-CFCPPPSNR 42.8539 dB   V-CFCPPPSNR 42.4569 dB] [ET    34 ] [L0 ] [L1 ]
+POC    7 TId: 0 ( I-SLICE, nQP 32 QP 32 )     870040 bits [Y 38.0314 dB    U 43.3768 dB    V 42.9406 dB] [Y-WSPSNR 37.2121 dB   U-WSPSNR 42.8430 dB   V-WSPSNR 42.4417 dB] [Y-C_SPSNR_NN 37.2224 dB   U-C_SPSNR_NN 42.8340 dB   V-C_SPSNR_NN 42.4391 dB] [Y-E2ESPSNR_NN 36.8800 dB   U-E2ESPSNR_NN 42.5355 dB   V-E2ESPSNR_NN 42.1343 dB] [Y-E2EWSPSNR 36.8760 dB   U-E2EWSPSNR 42.5452 dB   V-E2EWSPSNR 42.1261 dB] [Y-PSNR_DYN_VP0 37.9346 dB   U-PSNR_DYN_VP0 43.6027 dB   V-PSNR_DYN_VP0 42.6823 dB] [Y-PSNR_DYN_VP1 37.6214 dB   U-PSNR_DYN_VP1 43.4474 dB   V-PSNR_DYN_VP1 42.8218 dB] [Y-CFSPSNR_NN 36.8797 dB    U-CFSPSNR_NN 42.5340 dB    V-CFSPSNR_NN 42.1200 dB] [Y-CFCPPPSNR 37.2346 dB   U-CFCPPPSNR 42.8918 dB   V-CFCPPPSNR 42.4844 dB] [ET    34 ] [L0 ] [L1 ]
+POC    8 TId: 0 ( I-SLICE, nQP 32 QP 32 )     862688 bits [Y 38.1254 dB    U 43.4091 dB    V 42.9613 dB] [Y-WSPSNR 37.3018 dB   U-WSPSNR 42.8568 dB   V-WSPSNR 42.4505 dB] [Y-C_SPSNR_NN 37.2948 dB   U-C_SPSNR_NN 42.8550 dB   V-C_SPSNR_NN 42.4472 dB] [Y-E2ESPSNR_NN 36.9682 dB   U-E2ESPSNR_NN 42.5536 dB   V-E2ESPSNR_NN 42.1539 dB] [Y-E2EWSPSNR 36.9686 dB   U-E2EWSPSNR 42.5650 dB   V-E2EWSPSNR 42.1434 dB] [Y-PSNR_DYN_VP0 37.9938 dB   U-PSNR_DYN_VP0 43.6308 dB   V-PSNR_DYN_VP0 42.6940 dB] [Y-PSNR_DYN_VP1 37.7165 dB   U-PSNR_DYN_VP1 43.5375 dB   V-PSNR_DYN_VP1 42.8546 dB] [Y-CFSPSNR_NN 36.9681 dB    U-CFSPSNR_NN 42.5603 dB    V-CFSPSNR_NN 42.1396 dB] [Y-CFCPPPSNR 37.3375 dB   U-CFCPPPSNR 42.9035 dB   V-CFCPPPSNR 42.4962 dB] [ET    34 ] [L0 ] [L1 ]
+POC    9 TId: 0 ( I-SLICE, nQP 32 QP 32 )     863368 bits [Y 38.0972 dB    U 43.3513 dB    V 42.9150 dB] [Y-WSPSNR 37.2713 dB   U-WSPSNR 42.8291 dB   V-WSPSNR 42.3992 dB] [Y-C_SPSNR_NN 37.2686 dB   U-C_SPSNR_NN 42.8289 dB   V-C_SPSNR_NN 42.3986 dB] [Y-E2ESPSNR_NN 36.9405 dB   U-E2ESPSNR_NN 42.5227 dB   V-E2ESPSNR_NN 42.0890 dB] [Y-E2EWSPSNR 36.9378 dB   U-E2EWSPSNR 42.5278 dB   V-E2EWSPSNR 42.0852 dB] [Y-PSNR_DYN_VP0 37.9915 dB   U-PSNR_DYN_VP0 43.5343 dB   V-PSNR_DYN_VP0 42.6284 dB] [Y-PSNR_DYN_VP1 37.6527 dB   U-PSNR_DYN_VP1 43.5217 dB   V-PSNR_DYN_VP1 42.8338 dB] [Y-CFSPSNR_NN 36.9400 dB    U-CFSPSNR_NN 42.5292 dB    V-CFSPSNR_NN 42.0862 dB] [Y-CFCPPPSNR 37.3131 dB   U-CFCPPPSNR 42.8744 dB   V-CFCPPPSNR 42.4476 dB] [ET    34 ] [L0 ] [L1 ]
+POC   10 TId: 0 ( I-SLICE, nQP 32 QP 32 )     868112 bits [Y 38.0526 dB    U 43.2970 dB    V 42.8310 dB] [Y-WSPSNR 37.2177 dB   U-WSPSNR 42.7809 dB   V-WSPSNR 42.3361 dB] [Y-C_SPSNR_NN 37.2081 dB   U-C_SPSNR_NN 42.7762 dB   V-C_SPSNR_NN 42.3359 dB] [Y-E2ESPSNR_NN 36.8433 dB   U-E2ESPSNR_NN 42.4634 dB   V-E2ESPSNR_NN 42.0123 dB] [Y-E2EWSPSNR 36.8472 dB   U-E2EWSPSNR 42.4668 dB   V-E2EWSPSNR 42.0081 dB] [Y-PSNR_DYN_VP0 37.9426 dB   U-PSNR_DYN_VP0 43.3840 dB   V-PSNR_DYN_VP0 42.6423 dB] [Y-PSNR_DYN_VP1 37.6121 dB   U-PSNR_DYN_VP1 43.3727 dB   V-PSNR_DYN_VP1 42.6905 dB] [Y-CFSPSNR_NN 36.8430 dB    U-CFSPSNR_NN 42.4581 dB    V-CFSPSNR_NN 42.0060 dB] [Y-CFCPPPSNR 37.2572 dB   U-CFCPPPSNR 42.8308 dB   V-CFCPPPSNR 42.3816 dB] [ET    34 ] [L0 ] [L1 ]
+POC   11 TId: 0 ( I-SLICE, nQP 32 QP 32 )     864840 bits [Y 38.1048 dB    U 43.2667 dB    V 42.8288 dB] [Y-WSPSNR 37.2821 dB   U-WSPSNR 42.7647 dB   V-WSPSNR 42.3483 dB] [Y-C_SPSNR_NN 37.2834 dB   U-C_SPSNR_NN 42.7616 dB   V-C_SPSNR_NN 42.3465 dB] [Y-E2ESPSNR_NN 36.9521 dB   U-E2ESPSNR_NN 42.4568 dB   V-E2ESPSNR_NN 42.0306 dB] [Y-E2EWSPSNR 36.9453 dB   U-E2EWSPSNR 42.4609 dB   V-E2EWSPSNR 42.0262 dB] [Y-PSNR_DYN_VP0 37.9608 dB   U-PSNR_DYN_VP0 43.4828 dB   V-PSNR_DYN_VP0 42.6270 dB] [Y-PSNR_DYN_VP1 37.6907 dB   U-PSNR_DYN_VP1 43.3730 dB   V-PSNR_DYN_VP1 42.6957 dB] [Y-CFSPSNR_NN 36.9521 dB    U-CFSPSNR_NN 42.4554 dB    V-CFSPSNR_NN 42.0242 dB] [Y-CFCPPPSNR 37.3228 dB   U-CFCPPPSNR 42.8117 dB   V-CFCPPPSNR 42.3943 dB] [ET    34 ] [L0 ] [L1 ]
+POC   12 TId: 0 ( I-SLICE, nQP 32 QP 32 )     863416 bits [Y 38.1025 dB    U 43.2836 dB    V 42.8422 dB] [Y-WSPSNR 37.2856 dB   U-WSPSNR 42.7601 dB   V-WSPSNR 42.3585 dB] [Y-C_SPSNR_NN 37.3017 dB   U-C_SPSNR_NN 42.7524 dB   V-C_SPSNR_NN 42.3635 dB] [Y-E2ESPSNR_NN 36.9420 dB   U-E2ESPSNR_NN 42.4555 dB   V-E2ESPSNR_NN 42.0396 dB] [Y-E2EWSPSNR 36.9418 dB   U-E2EWSPSNR 42.4595 dB   V-E2EWSPSNR 42.0413 dB] [Y-PSNR_DYN_VP0 37.9627 dB   U-PSNR_DYN_VP0 43.4144 dB   V-PSNR_DYN_VP0 42.6217 dB] [Y-PSNR_DYN_VP1 37.6603 dB   U-PSNR_DYN_VP1 43.2954 dB   V-PSNR_DYN_VP1 42.6167 dB] [Y-CFSPSNR_NN 36.9417 dB    U-CFSPSNR_NN 42.4625 dB    V-CFSPSNR_NN 42.0384 dB] [Y-CFCPPPSNR 37.3178 dB   U-CFCPPPSNR 42.8018 dB   V-CFCPPPSNR 42.4006 dB] [ET    34 ] [L0 ] [L1 ]
+POC   13 TId: 0 ( I-SLICE, nQP 32 QP 32 )     867488 bits [Y 38.0019 dB    U 43.2569 dB    V 42.8358 dB] [Y-WSPSNR 37.1872 dB   U-WSPSNR 42.7256 dB   V-WSPSNR 42.3500 dB] [Y-C_SPSNR_NN 37.1912 dB   U-C_SPSNR_NN 42.7166 dB   V-C_SPSNR_NN 42.3579 dB] [Y-E2ESPSNR_NN 36.8403 dB   U-E2ESPSNR_NN 42.4102 dB   V-E2ESPSNR_NN 42.0269 dB] [Y-E2EWSPSNR 36.8392 dB   U-E2EWSPSNR 42.4176 dB   V-E2EWSPSNR 42.0232 dB] [Y-PSNR_DYN_VP0 37.8954 dB   U-PSNR_DYN_VP0 43.4420 dB   V-PSNR_DYN_VP0 42.6902 dB] [Y-PSNR_DYN_VP1 37.5703 dB   U-PSNR_DYN_VP1 43.3973 dB   V-PSNR_DYN_VP1 42.6772 dB] [Y-CFSPSNR_NN 36.8398 dB    U-CFSPSNR_NN 42.4112 dB    V-CFSPSNR_NN 42.0266 dB] [Y-CFCPPPSNR 37.2235 dB   U-CFCPPPSNR 42.7700 dB   V-CFCPPPSNR 42.3930 dB] [ET    34 ] [L0 ] [L1 ]
+POC   14 TId: 0 ( I-SLICE, nQP 32 QP 32 )     864032 bits [Y 38.1024 dB    U 43.2295 dB    V 42.7700 dB] [Y-WSPSNR 37.2735 dB   U-WSPSNR 42.7292 dB   V-WSPSNR 42.3014 dB] [Y-C_SPSNR_NN 37.2645 dB   U-C_SPSNR_NN 42.7235 dB   V-C_SPSNR_NN 42.3071 dB] [Y-E2ESPSNR_NN 36.9146 dB   U-E2ESPSNR_NN 42.4068 dB   V-E2ESPSNR_NN 41.9728 dB] [Y-E2EWSPSNR 36.9253 dB   U-E2EWSPSNR 42.4078 dB   V-E2EWSPSNR 41.9687 dB] [Y-PSNR_DYN_VP0 38.0193 dB   U-PSNR_DYN_VP0 43.4231 dB   V-PSNR_DYN_VP0 42.5349 dB] [Y-PSNR_DYN_VP1 37.6387 dB   U-PSNR_DYN_VP1 43.3443 dB   V-PSNR_DYN_VP1 42.5396 dB] [Y-CFSPSNR_NN 36.9136 dB    U-CFSPSNR_NN 42.4073 dB    V-CFSPSNR_NN 41.9645 dB] [Y-CFCPPPSNR 37.3162 dB   U-CFCPPPSNR 42.7766 dB   V-CFCPPPSNR 42.3486 dB] [ET    34 ] [L0 ] [L1 ]
+POC   15 TId: 0 ( I-SLICE, nQP 32 QP 32 )     863560 bits [Y 38.1584 dB    U 43.2054 dB    V 42.7585 dB] [Y-WSPSNR 37.3347 dB   U-WSPSNR 42.6956 dB   V-WSPSNR 42.2822 dB] [Y-C_SPSNR_NN 37.3221 dB   U-C_SPSNR_NN 42.6889 dB   V-C_SPSNR_NN 42.2755 dB] [Y-E2ESPSNR_NN 36.9921 dB   U-E2ESPSNR_NN 42.3818 dB   V-E2ESPSNR_NN 41.9540 dB] [Y-E2EWSPSNR 36.9960 dB   U-E2EWSPSNR 42.3806 dB   V-E2EWSPSNR 41.9497 dB] [Y-PSNR_DYN_VP0 38.0311 dB   U-PSNR_DYN_VP0 43.3593 dB   V-PSNR_DYN_VP0 42.5943 dB] [Y-PSNR_DYN_VP1 37.6699 dB   U-PSNR_DYN_VP1 43.2387 dB   V-PSNR_DYN_VP1 42.6299 dB] [Y-CFSPSNR_NN 36.9914 dB    U-CFSPSNR_NN 42.3819 dB    V-CFSPSNR_NN 41.9464 dB] [Y-CFCPPPSNR 37.3770 dB   U-CFCPPPSNR 42.7392 dB   V-CFCPPPSNR 42.3281 dB] [ET    34 ] [L0 ] [L1 ]
+POC   16 TId: 0 ( I-SLICE, nQP 32 QP 32 )     867824 bits [Y 38.0732 dB    U 43.2118 dB    V 42.8218 dB] [Y-WSPSNR 37.2501 dB   U-WSPSNR 42.6985 dB   V-WSPSNR 42.3348 dB] [Y-C_SPSNR_NN 37.2565 dB   U-C_SPSNR_NN 42.6984 dB   V-C_SPSNR_NN 42.3306 dB] [Y-E2ESPSNR_NN 36.8959 dB   U-E2ESPSNR_NN 42.3847 dB   V-E2ESPSNR_NN 41.9975 dB] [Y-E2EWSPSNR 36.8973 dB   U-E2EWSPSNR 42.3848 dB   V-E2EWSPSNR 41.9967 dB] [Y-PSNR_DYN_VP0 37.9626 dB   U-PSNR_DYN_VP0 43.4222 dB   V-PSNR_DYN_VP0 42.6338 dB] [Y-PSNR_DYN_VP1 37.6294 dB   U-PSNR_DYN_VP1 43.3878 dB   V-PSNR_DYN_VP1 42.7254 dB] [Y-CFSPSNR_NN 36.8954 dB    U-CFSPSNR_NN 42.3788 dB    V-CFSPSNR_NN 41.9961 dB] [Y-CFCPPPSNR 37.2857 dB   U-CFCPPPSNR 42.7446 dB   V-CFCPPPSNR 42.3785 dB] [ET    34 ] [L0 ] [L1 ]
+POC   17 TId: 0 ( I-SLICE, nQP 32 QP 32 )     867056 bits [Y 38.1032 dB    U 43.1443 dB    V 42.7242 dB] [Y-WSPSNR 37.2754 dB   U-WSPSNR 42.6458 dB   V-WSPSNR 42.2453 dB] [Y-C_SPSNR_NN 37.2676 dB   U-C_SPSNR_NN 42.6472 dB   V-C_SPSNR_NN 42.2518 dB] [Y-E2ESPSNR_NN 36.9207 dB   U-E2ESPSNR_NN 42.3228 dB   V-E2ESPSNR_NN 41.9169 dB] [Y-E2EWSPSNR 36.9317 dB   U-E2EWSPSNR 42.3306 dB   V-E2EWSPSNR 41.9081 dB] [Y-PSNR_DYN_VP0 38.0534 dB   U-PSNR_DYN_VP0 43.3193 dB   V-PSNR_DYN_VP0 42.4361 dB] [Y-PSNR_DYN_VP1 37.6237 dB   U-PSNR_DYN_VP1 43.3207 dB   V-PSNR_DYN_VP1 42.6201 dB] [Y-CFSPSNR_NN 36.9204 dB    U-CFSPSNR_NN 42.3309 dB    V-CFSPSNR_NN 41.9183 dB] [Y-CFCPPPSNR 37.3175 dB   U-CFCPPPSNR 42.6944 dB   V-CFCPPPSNR 42.2889 dB] [ET    34 ] [L0 ] [L1 ]
+POC   18 TId: 0 ( I-SLICE, nQP 32 QP 32 )     868384 bits [Y 38.1120 dB    U 43.1909 dB    V 42.7820 dB] [Y-WSPSNR 37.2897 dB   U-WSPSNR 42.6684 dB   V-WSPSNR 42.2845 dB] [Y-C_SPSNR_NN 37.2922 dB   U-C_SPSNR_NN 42.6680 dB   V-C_SPSNR_NN 42.2799 dB] [Y-E2ESPSNR_NN 36.9442 dB   U-E2ESPSNR_NN 42.3421 dB   V-E2ESPSNR_NN 41.9393 dB] [Y-E2EWSPSNR 36.9427 dB   U-E2EWSPSNR 42.3472 dB   V-E2EWSPSNR 41.9433 dB] [Y-PSNR_DYN_VP0 37.9744 dB   U-PSNR_DYN_VP0 43.2933 dB   V-PSNR_DYN_VP0 42.5030 dB] [Y-PSNR_DYN_VP1 37.6968 dB   U-PSNR_DYN_VP1 43.3575 dB   V-PSNR_DYN_VP1 42.6613 dB] [Y-CFSPSNR_NN 36.9433 dB    U-CFSPSNR_NN 42.3477 dB    V-CFSPSNR_NN 41.9460 dB] [Y-CFCPPPSNR 37.3105 dB   U-CFCPPPSNR 42.7204 dB   V-CFCPPPSNR 42.3248 dB] [ET    34 ] [L0 ] [L1 ]
+POC   19 TId: 0 ( I-SLICE, nQP 32 QP 32 )     872344 bits [Y 38.0975 dB    U 43.2039 dB    V 42.7857 dB] [Y-WSPSNR 37.2783 dB   U-WSPSNR 42.6850 dB   V-WSPSNR 42.2826 dB] [Y-C_SPSNR_NN 37.2723 dB   U-C_SPSNR_NN 42.6819 dB   V-C_SPSNR_NN 42.2834 dB] [Y-E2ESPSNR_NN 36.9265 dB   U-E2ESPSNR_NN 42.3552 dB   V-E2ESPSNR_NN 41.9363 dB] [Y-E2EWSPSNR 36.9332 dB   U-E2EWSPSNR 42.3631 dB   V-E2EWSPSNR 41.9418 dB] [Y-PSNR_DYN_VP0 38.0007 dB   U-PSNR_DYN_VP0 43.2578 dB   V-PSNR_DYN_VP0 42.5818 dB] [Y-PSNR_DYN_VP1 37.6520 dB   U-PSNR_DYN_VP1 43.3649 dB   V-PSNR_DYN_VP1 42.7332 dB] [Y-CFSPSNR_NN 36.9261 dB    U-CFSPSNR_NN 42.3646 dB    V-CFSPSNR_NN 41.9507 dB] [Y-CFCPPPSNR 37.3151 dB   U-CFCPPPSNR 42.7339 dB   V-CFCPPPSNR 42.3261 dB] [ET    34 ] [L0 ] [L1 ]
+
+
+SUMMARY --------------------------------------------------------
+	Total Frames |   Bitrate     Y-PSNR    U-PSNR    V-PSNR    YUV-PSNR  Y-WSPSNR  U-WSPSNR  V-WSPSNR    Y-C_SPSNR_NN  U-C_SPSNR_NN  V-C_SPSNR_NN  Y-E2ESPSNR_NN U-E2ESPSNR_NN V-E2ESPSNR_NN  Y-E2EWSPSNR U-E2EWSPSNR V-E2EWSPSNR  Y-PSNR_DYN_VP0 U-PSNR_DYN_VP0 V-PSNR_DYN_VP0  Y-PSNR_DYN_VP1 U-PSNR_DYN_VP1 V-PSNR_DYN_VP1  Y-CFSPSNR_NN U-CFSPSNR_NN V-CFSPSNR_NN  Y-CFCPPPSNR  U-CFCPPPSNR  V-CFCPPPSNR  
+	       20    a   25930.6200   38.0906   43.3022   42.8735   39.2125  37.2644   42.7799   42.3738     37.2605       42.7759       42.3745       36.9206       42.4713       42.0586        36.9250     42.4765     42.0547      37.9901        43.4707        42.6470         37.6602        43.4400        42.7759         36.9201      42.4737      42.0550      37.2990      42.8265      42.4174     
+
+
+I Slices--------------------------------------------------------
+	Total Frames |   Bitrate     Y-PSNR    U-PSNR    V-PSNR    YUV-PSNR  Y-WSPSNR  U-WSPSNR  V-WSPSNR    Y-C_SPSNR_NN  U-C_SPSNR_NN  V-C_SPSNR_NN  Y-E2ESPSNR_NN U-E2ESPSNR_NN V-E2ESPSNR_NN  Y-E2EWSPSNR U-E2EWSPSNR V-E2EWSPSNR  Y-PSNR_DYN_VP0 U-PSNR_DYN_VP0 V-PSNR_DYN_VP0  Y-PSNR_DYN_VP1 U-PSNR_DYN_VP1 V-PSNR_DYN_VP1  Y-CFSPSNR_NN U-CFSPSNR_NN V-CFSPSNR_NN  Y-CFCPPPSNR  U-CFCPPPSNR  V-CFCPPPSNR  
+	       20    i   25930.6200   38.0906   43.3022   42.8735   39.2125  37.2644   42.7799   42.3738     37.2605       42.7759       42.3745       36.9206       42.4713       42.0586        36.9250     42.4765     42.0547      37.9901        43.4707        42.6470         37.6602        43.4400        42.7759         36.9201      42.4737      42.0550      37.2990      42.8265      42.4174     
+
+
+P Slices--------------------------------------------------------
+	Total Frames |   Bitrate     Y-PSNR    U-PSNR    V-PSNR    YUV-PSNR 
+	        0    p         -nan      -nan      -nan      -nan      -nan
+
+
+B Slices--------------------------------------------------------
+	Total Frames |   Bitrate     Y-PSNR    U-PSNR    V-PSNR    YUV-PSNR 
+	        0    b         -nan      -nan      -nan      -nan      -nan
+
+RVM: 0.000
+Bytes written to file: 2160885 (25930.620 kbps)
+
+ Total Time:      822.119 sec.
