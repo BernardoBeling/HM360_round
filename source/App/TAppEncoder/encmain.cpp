@@ -49,6 +49,8 @@
 // Main function
 // ====================================================================================================================
 
+float depthMatrix[DM_Y][DM_X];
+
 int main(int argc, char* argv[])
 {
   TAppEncTop  cTAppEncTop;
@@ -102,7 +104,7 @@ int main(int argc, char* argv[])
   printf("\n Total Time: %12.3f sec.\n", dResult);
 
   // destroy application encoder class
-  cTAppEncTop.destroy();
+  cTAppEncTop.destroy();  
 
   return 0;
 }

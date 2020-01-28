@@ -115,6 +115,8 @@ static const UInt   MAX_UINT =                            0xFFFFFFFFU; ///< max.
 static const Int    MAX_INT =                              2147483647; ///< max. value of signed 32-bit integer
 static const Double MAX_DOUBLE =                             1.7e+308; ///< max. value of Double-type value
 
+//static const refMatrix [][] = { }
+
 // ====================================================================================================================
 // Coding tool configuration
 // ====================================================================================================================
@@ -244,6 +246,11 @@ static const Int LAST_SIGNIFICANT_GROUPS =                        10 ;
 static const Int MAX_ENCODER_DEBLOCKING_QUALITY_LAYERS =           8 ;
 
 static const UInt LUMA_LEVEL_TO_DQP_LUT_MAXSIZE =                1024; ///< max LUT size for QP offset based on luma
+
+static const int DM_Y = 100;
+static const int DM_X = 200;
+
+static const int semiGOP = 5;
 
 // ====================================================================================================================
 // Macro functions

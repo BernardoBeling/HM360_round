@@ -44,7 +44,7 @@
 #include <cmath>
 #include <algorithm>
 using namespace std;
-
+extern float depthMatrix[DM_Y][DM_X];
 
 //! \ingroup TLibEncoder
 //! \{
@@ -201,6 +201,26 @@ Void TEncCu::destroy()
   }
 }
 
+int roundDepth(float oldDepth,int resV, int pelY) {
+   
+    float YUpper = (float)2*pelY/resV;  
+    float YLower = YUpper-1;       
+    float X = 0;    
+    
+    if(pelY < resV/2)
+        X = sqrt(1-(YUpper*YUpper));
+    if(pelY > resV/2)   
+        X = sqrt(1-(YLower*YLower));             
+    
+    float scaleFactor = 1 - X;  
+    float frac = oldDepth - (int)oldDepth;
+    
+    if(frac < scaleFactor)
+        return (int)oldDepth;
+    else
+        return (int)oldDepth+1;
+}
+
 /** \param    pcEncTop      pointer of encoder class
  */
 Void TEncCu::init( TEncTop* pcEncTop )
@@ -240,6 +260,43 @@ Void TEncCu::compressCtu( TComDataCU* pCtu )
   xCompressCU( m_ppcBestCU[0], m_ppcTempCU[0], 0 DEBUG_STRING_PASS_INTO(sDebug) );
   DEBUG_STRING_OUTPUT(std::cout, sDebug)
 
+  /*****************Modificacoes******************/
+  int ctuDepth;
+  int maxDepth = 0;
+  int ctuPosY = pCtu->getCtuRsAddr()/pCtu->getPic()->getFrameWidthInCtus();
+  int ctuPosX = pCtu->getCtuRsAddr()-ctuPosY*pCtu->getPic()->getFrameWidthInCtus();
+  int h = pCtu->getTotalNumPart();
+  
+   for(int i=0;i<h; i++) {
+      ctuDepth = (int)pCtu->getDepth(i);
+      if (ctuDepth == 3) {
+          int part = pCtu->getPartitionSize(i);
+          if(part != 0)
+              maxDepth = 4;
+      }
+      if (ctuDepth > maxDepth)
+          maxDepth = ctuDepth;
+    }
+  /***Update matrix with the semigop reference frame***/
+  if(pCtu->getPic()->getPOC() % semiGOP == 0)
+      depthMatrix[ctuPosY][ctuPosX] = (float)maxDepth;
+  
+  /***Update matrix with the average of semigop frames***/
+  else {
+      float oldDepth = depthMatrix[ctuPosY][ctuPosX];
+      float newDepth = (maxDepth+oldDepth)/2;      
+      depthMatrix[ctuPosY][ctuPosX] = newDepth;
+  }
+  /*if(ctuPosY == 24 && ctuPosX == 39) {
+      cout << "\n=============== MATRIX: " << (pCtu->getPic()->getPOC() % semiGOP) <<" ======================" << endl;
+      for(int i=0;i<25;i++) {
+      cout << "\n";
+      for(int j=0;j<40;j++)
+          cout << depthMatrix[i][j] << ",";      
+        }
+  }*/
+  /*******************  FIM  **********************/
+          
 #if ADAPTIVE_QP_SELECTION
   if( m_pcEncCfg->getUseAdaptQpSelect() )
   {
@@ -248,7 +305,7 @@ Void TEncCu::compressCtu( TComDataCU* pCtu )
       xCtuCollectARLStats( pCtu );
     }
   }
-#endif
+#endif    
 }
 /** \param  pCtu  pointer of CU data class
  */
@@ -265,7 +322,7 @@ Void TEncCu::encodeCtu ( TComDataCU* pCtu )
   }
 
   // Encode CU data
-  xEncodeCU( pCtu, 0, 0 );
+  xEncodeCU( pCtu, 0, 0 ); 
 }
 
 // ====================================================================================================================
@@ -462,7 +519,23 @@ Void TEncCu::xCompressCU( TComDataCU*& rpcBestCU, TComDataCU*& rpcTempCU, const 
   Int iMinQP;
   Int iMaxQP;
   Bool isAddLowestQP = false;
-
+  
+  /************************Modificações***************************/
+  bool allow4x4 = true;
+  bool splitCU = true;
+  int resV = rpcBestCU->getPic()->getFrameHeightInCtus()*64;    
+  
+  if(rpcBestCU->getPic()->getPOC() % semiGOP != 0) {
+      int posY = rpcBestCU->getCtuRsAddr()/rpcBestCU->getPic()->getFrameWidthInCtus();
+      int posX = rpcBestCU->getCtuRsAddr()-posY*rpcBestCU->getPic()->getFrameWidthInCtus();
+      if(uiTPelY/resV != 0.5) { //linha de ctu do meio     
+        int rounded = roundDepth(depthMatrix[posY][posX],resV,uiTPelY);      
+        if(rounded == uiDepth)      
+            splitCU = false;
+      }
+  }  
+  /*****************************FIM*******************************/
+  
   const UInt numberValidComponents = rpcBestCU->getPic()->getNumberValidComponents();
 
   if( uiDepth <= pps.getMaxCuDQPDepth() )
@@ -743,14 +816,18 @@ Void TEncCu::xCompressCU( TComDataCU*& rpcBestCU, TComDataCU*& rpcTempCU, const 
         {
           xCheckRDCostIntra( rpcBestCU, rpcTempCU, SIZE_2Nx2N DEBUG_STRING_PASS_INTO(sDebug) );
           rpcTempCU->initEstData( uiDepth, iQP, bIsLosslessMode );
-          if( uiDepth == sps.getLog2DiffMaxMinCodingBlockSize() )
-          {
-            if( rpcTempCU->getWidth(0) > ( 1 << sps.getQuadtreeTULog2MinSize() ) )
+          
+          if( splitCU == true && allow4x4 == true ) 
+          { //entra aqui quando for splitar para PU 4x4
+            if( uiDepth == sps.getLog2DiffMaxMinCodingBlockSize() )
             {
-              xCheckRDCostIntra( rpcBestCU, rpcTempCU, SIZE_NxN DEBUG_STRING_PASS_INTO(sDebug)   );
-              rpcTempCU->initEstData( uiDepth, iQP, bIsLosslessMode );
+              if( rpcTempCU->getWidth(0) > ( 1 << sps.getQuadtreeTULog2MinSize() ) )
+              {
+                xCheckRDCostIntra( rpcBestCU, rpcTempCU, SIZE_NxN DEBUG_STRING_PASS_INTO(sDebug)   );
+                rpcTempCU->initEstData( uiDepth, iQP, bIsLosslessMode );
+              }
             }
-          }
+          } // fecha if
         }
 
         // test PCM
@@ -829,6 +906,8 @@ Void TEncCu::xCompressCU( TComDataCU*& rpcBestCU, TComDataCU*& rpcTempCU, const 
 
   const Bool bSubBranch = bBoundary || !( m_pcEncCfg->getUseEarlyCU() && rpcBestCU->getTotalCost()!=MAX_DOUBLE && rpcBestCU->isSkipped(0) );
 
+  if(splitCU == true) 
+  { //begin split CU
   if( bSubBranch && uiDepth < sps.getLog2DiffMaxMinCodingBlockSize() && (!getFastDeltaQp() || uiWidth > fastDeltaQPCuMaxSize || bBoundary))
   {
     // further split
@@ -975,7 +1054,8 @@ Void TEncCu::xCompressCU( TComDataCU*& rpcBestCU, TComDataCU*& rpcTempCU, const 
                                                                                                                                                        // with sub partitioned prediction.
     }
   }
-
+  }//end if split
+  
   DEBUG_STRING_APPEND(sDebug_, sDebug);
 
   rpcBestCU->copyToPic(uiDepth);                                                     // Copy Best data to Picture for next partition prediction.
