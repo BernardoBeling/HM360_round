@@ -45,6 +45,7 @@
 #include <algorithm>
 using namespace std;
 extern float depthMatrix[DM_Y][DM_X];
+//extern int viewMatrix[DM_Y][DM_X];
 
 //! \ingroup TLibEncoder
 //! \{
@@ -201,24 +202,22 @@ Void TEncCu::destroy()
   }
 }
 
-int roundDepth(float oldDepth,int resV, int pelY) {
+int roundDepth(float oldDepth,int resV, int posV) {
    
-    float YUpper = (float)2*pelY/resV;  
-    float YLower = YUpper-1;       
-    float X = 0;    
+    float YUpper = (float)2*posV/resV;  
+    float YLower = (float)1-YUpper;       
+    float X = 0;     
     
-    if(pelY < resV/2)
-        X = sqrt(1-(YUpper*YUpper));
-    if(pelY > resV/2)   
-        X = sqrt(1-(YLower*YLower));             
+    if(posV <= resV/2)
+        X = 1-YUpper; // 1 = 100%
+    else             
+        X = YLower*(-1);                 
+      
+    float frac = oldDepth - (int)oldDepth;    
     
-    float scaleFactor = 1 - X;  
-    float frac = oldDepth - (int)oldDepth;
+    //cout << X << endl;
     
-    if(frac < scaleFactor)
-        return (int)oldDepth;
-    else
-        return (int)oldDepth+1;
+    return (frac < X) ? (int)oldDepth : (int)oldDepth+1; 
 }
 
 /** \param    pcEncTop      pointer of encoder class
@@ -265,14 +264,14 @@ Void TEncCu::compressCtu( TComDataCU* pCtu )
   int maxDepth = 0;
   int ctuPosY = pCtu->getCtuRsAddr()/pCtu->getPic()->getFrameWidthInCtus();
   int ctuPosX = pCtu->getCtuRsAddr()-ctuPosY*pCtu->getPic()->getFrameWidthInCtus();
-  int h = pCtu->getTotalNumPart();
+  int h = pCtu->getTotalNumPart();  
   
    for(int i=0;i<h; i++) {
       ctuDepth = (int)pCtu->getDepth(i);
       if (ctuDepth == 3) {
           int part = pCtu->getPartitionSize(i);
           if(part != 0)
-              maxDepth = 4;
+              ctuDepth = 4;
       }
       if (ctuDepth > maxDepth)
           maxDepth = ctuDepth;
@@ -282,19 +281,12 @@ Void TEncCu::compressCtu( TComDataCU* pCtu )
       depthMatrix[ctuPosY][ctuPosX] = (float)maxDepth;
   
   /***Update matrix with the average of semigop frames***/
-  else {
+  else {      
       float oldDepth = depthMatrix[ctuPosY][ctuPosX];
       float newDepth = (maxDepth+oldDepth)/2;      
       depthMatrix[ctuPosY][ctuPosX] = newDepth;
   }
-  /*if(ctuPosY == 24 && ctuPosX == 39) {
-      cout << "\n=============== MATRIX: " << (pCtu->getPic()->getPOC() % semiGOP) <<" ======================" << endl;
-      for(int i=0;i<25;i++) {
-      cout << "\n";
-      for(int j=0;j<40;j++)
-          cout << depthMatrix[i][j] << ",";      
-        }
-  }*/
+  //viewMatrix[ctuPosY][ctuPosX] = maxDepth; 
   /*******************  FIM  **********************/
           
 #if ADAPTIVE_QP_SELECTION
@@ -520,19 +512,17 @@ Void TEncCu::xCompressCU( TComDataCU*& rpcBestCU, TComDataCU*& rpcTempCU, const 
   Int iMaxQP;
   Bool isAddLowestQP = false;
   
-  /************************Modificações***************************/
-  bool allow4x4 = true;
+  /************************Modificações***************************/  
   bool splitCU = true;
-  int resV = rpcBestCU->getPic()->getFrameHeightInCtus()*64;    
+  int resV = rpcBestCU->getPic()->getFrameHeightInCtus(); 
+  int posV = rpcBestCU->getCtuRsAddr()/rpcBestCU->getPic()->getFrameWidthInCtus();  
   
   if(rpcBestCU->getPic()->getPOC() % semiGOP != 0) {
       int posY = rpcBestCU->getCtuRsAddr()/rpcBestCU->getPic()->getFrameWidthInCtus();
       int posX = rpcBestCU->getCtuRsAddr()-posY*rpcBestCU->getPic()->getFrameWidthInCtus();
-      if(uiTPelY/resV != 0.5) { //linha de ctu do meio     
-        int rounded = roundDepth(depthMatrix[posY][posX],resV,uiTPelY);      
-        if(rounded == uiDepth)      
-            splitCU = false;
-      }
+      int rounded = roundDepth(depthMatrix[posY][posX],resV,posV);                                                                 
+      if(rounded == uiDepth)      
+        splitCU = false;    
   }  
   /*****************************FIM*******************************/
   
@@ -816,9 +806,7 @@ Void TEncCu::xCompressCU( TComDataCU*& rpcBestCU, TComDataCU*& rpcTempCU, const 
         {
           xCheckRDCostIntra( rpcBestCU, rpcTempCU, SIZE_2Nx2N DEBUG_STRING_PASS_INTO(sDebug) );
           rpcTempCU->initEstData( uiDepth, iQP, bIsLosslessMode );
-          
-          if( splitCU == true && allow4x4 == true ) 
-          { //entra aqui quando for splitar para PU 4x4
+                  
             if( uiDepth == sps.getLog2DiffMaxMinCodingBlockSize() )
             {
               if( rpcTempCU->getWidth(0) > ( 1 << sps.getQuadtreeTULog2MinSize() ) )
@@ -826,8 +814,7 @@ Void TEncCu::xCompressCU( TComDataCU*& rpcBestCU, TComDataCU*& rpcTempCU, const 
                 xCheckRDCostIntra( rpcBestCU, rpcTempCU, SIZE_NxN DEBUG_STRING_PASS_INTO(sDebug)   );
                 rpcTempCU->initEstData( uiDepth, iQP, bIsLosslessMode );
               }
-            }
-          } // fecha if
+            }          
         }
 
         // test PCM
