@@ -44,8 +44,7 @@
 #include <cmath>
 #include <algorithm>
 using namespace std;
-extern float depthMatrix[DM_Y][DM_X];
-//extern int viewMatrix[DM_Y][DM_X];
+extern float depthMatrix[DM_Y][DM_X],balanceMatrix[4][5],*semigopVec[semiGOP];
 
 //! \ingroup TLibEncoder
 //! \{
@@ -209,9 +208,9 @@ int roundDepth(float oldDepth,int resV, int posV) {
     float X = 0;     
     
     if(posV <= resV/2)
-        X = 1-YUpper; // 1 = 100%
+        X = (1-YUpper)*0.6; // 0.6 = 100%
     else             
-        X = YLower*(-1);                 
+        X = YLower*(-0.6);                 
       
     float frac = oldDepth - (int)oldDepth;    
     
@@ -261,10 +260,11 @@ Void TEncCu::compressCtu( TComDataCU* pCtu )
 
   /*****************Modificacoes******************/
   int ctuDepth;
-  int maxDepth = 0;
+  int maxDepth = 0; 
+  int semigopFrame = pCtu->getPic()->getPOC() % semiGOP;
   int ctuPosY = pCtu->getCtuRsAddr()/pCtu->getPic()->getFrameWidthInCtus();
   int ctuPosX = pCtu->getCtuRsAddr()-ctuPosY*pCtu->getPic()->getFrameWidthInCtus();
-  int h = pCtu->getTotalNumPart();  
+  int h = pCtu->getTotalNumPart();      
   
    for(int i=0;i<h; i++) {
       ctuDepth = (int)pCtu->getDepth(i);
@@ -275,18 +275,62 @@ Void TEncCu::compressCtu( TComDataCU* pCtu )
       }
       if (ctuDepth > maxDepth)
           maxDepth = ctuDepth;
-    }
+    }                  
+    float* tempMatrix = semigopVec[semigopFrame];    
+    
+    *(tempMatrix+(pCtu->getCtuRsAddr()*sizeof(float))) = (float)maxDepth;           
+    
   /***Update matrix with the semigop reference frame***/
-  if(pCtu->getPic()->getPOC() % semiGOP == 0)
-      depthMatrix[ctuPosY][ctuPosX] = (float)maxDepth;
+  if(semigopFrame == 0)         
+    depthMatrix[ctuPosY][ctuPosX] = (float)maxDepth;             
   
   /***Update matrix with the average of semigop frames***/
-  else {      
-      float oldDepth = depthMatrix[ctuPosY][ctuPosX];
-      float newDepth = (maxDepth+oldDepth)/2;      
-      depthMatrix[ctuPosY][ctuPosX] = newDepth;
+  else {  
+    if(semigopFrame != semiGOP-1) {
+        int f=0;
+        float sum = 0;
+
+        for(int i = semigopFrame-1; (i<4) && (f != 1); i++) {
+            for(int j=0; (j<5) && (f != 1); j++) {            
+                if(balanceMatrix[i][j] == 0)
+                    f=1;            
+                else {                
+                    tempMatrix = semigopVec[j];                 
+                    sum += *(tempMatrix+(pCtu->getCtuRsAddr()*sizeof(float))) * balanceMatrix[i][j]; 
+                    //cout<<*(tempMatrix+(pCtu->getCtuRsAddr()*sizeof(float)))<<" * "<<balanceMatrix[i][j]<<" = "<<sum<<endl;
+                }
+            }        
+            depthMatrix[ctuPosY][ctuPosX] = sum/100;
+        }             
+      }
   }
-  //viewMatrix[ctuPosY][ctuPosX] = maxDepth; 
+    /*if(ctuPosY == 25 && ctuPosX == 51) {
+        for(int i=0,j=0;i<(26*52);i++,j++){                        
+            for(int k=0;k<=semigopFrame;k++){                
+                tempMatrix = semigopVec[k];
+                if(j==52) {
+                    cout<<endl;
+                    j=0;
+                }
+                if(k == 0) 
+                    cout<< *(tempMatrix+(i*sizeof(float))); 
+
+                else
+                    cout<<"-"<<*(tempMatrix+(i*sizeof(float)));                                         
+            }
+            cout<<", ";
+        }
+        cout<<endl;
+    }
+    if(ctuPosY == 25 && ctuPosX == 51){
+        cout<<"============================================================"<<endl;
+        for(int i=0;i<26;i++){
+            for(int j=0;j<52;j++){
+                cout<<depthMatrix[i][j]<<", ";
+            }
+            cout<<endl;
+        }
+    }*/
   /*******************  FIM  **********************/
           
 #if ADAPTIVE_QP_SELECTION
@@ -514,15 +558,24 @@ Void TEncCu::xCompressCU( TComDataCU*& rpcBestCU, TComDataCU*& rpcTempCU, const 
   
   /************************Modificações***************************/  
   bool splitCU = true;
+  int semigopFrame = rpcBestCU->getPic()->getPOC();
   int resV = rpcBestCU->getPic()->getFrameHeightInCtus(); 
   int posV = rpcBestCU->getCtuRsAddr()/rpcBestCU->getPic()->getFrameWidthInCtus();  
   
-  if(rpcBestCU->getPic()->getPOC() % semiGOP != 0) {
+  if(semigopFrame % semiGOP != 0) {
       int posY = rpcBestCU->getCtuRsAddr()/rpcBestCU->getPic()->getFrameWidthInCtus();
       int posX = rpcBestCU->getCtuRsAddr()-posY*rpcBestCU->getPic()->getFrameWidthInCtus();
-      int rounded = roundDepth(depthMatrix[posY][posX],resV,posV);                                                                 
-      if(rounded == uiDepth)      
-        splitCU = false;    
+      int rounded = roundDepth(depthMatrix[posY][posX],resV,posV);      
+      if(rounded == uiDepth) {                     
+       if(semigopFrame % semiGOP == 1) {
+              if(uiDepth == depthMatrix[posY][posX] + 1)
+                  splitCU = false;
+              else
+                  splitCU = true;                   
+        }
+        else 
+           splitCU = false;       
+      }
   }  
   /*****************************FIM*******************************/
   

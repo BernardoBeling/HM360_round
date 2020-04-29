@@ -39,6 +39,7 @@
 #include <iostream>
 #include "TAppEncTop.h"
 #include "TAppCommon/program_options_lite.h"
+#include <cstdlib>
 
 //! \ingroup TAppEncoder
 //! \{
@@ -50,19 +51,29 @@
 // ====================================================================================================================
 
 float depthMatrix[DM_Y][DM_X];
+float balanceMatrix[4][5] = {{70,30,0,0,0},{50,30,20,0,0},{45,25,20,10,0},{0}};
+float* semigopVec[semiGOP];
 
 int main(int argc, char* argv[])
-{
+{ 
+  for(int i=0;i<semiGOP;i++){      
+    float **tempMatrix = new float*[DM_Y];
+        for(int j=0;j<DM_Y;j++){
+            tempMatrix[j] = new float[DM_X];
+        }
+    semigopVec[i] = *tempMatrix;
+  }
+  
   TAppEncTop  cTAppEncTop;
-
+  
   // print information
   fprintf( stdout, "\n" );
   fprintf( stdout, "HM software: Encoder Version [%s] (including RExt)", NV_VERSION );
   fprintf( stdout, NVM_ONOS );
   fprintf( stdout, NVM_COMPILEDBY );
   fprintf( stdout, NVM_BITS );
-  fprintf( stdout, "\n\n" );
-
+  fprintf( stdout, "\n\n" );  
+          
   // create application encoder class
   cTAppEncTop.create();
 
@@ -104,7 +115,7 @@ int main(int argc, char* argv[])
   printf("\n Total Time: %12.3f sec.\n", dResult);
 
   // destroy application encoder class
-  cTAppEncTop.destroy();  
+  cTAppEncTop.destroy();    
 
   return 0;
 }
