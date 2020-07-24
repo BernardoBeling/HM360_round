@@ -251,6 +251,7 @@ static const int DM_Y = 100;
 static const int DM_X = 200;
 
 static const int semiGOP = 5;
+static const float roundConst = 0.6;
 
 // ====================================================================================================================
 // Macro functions
