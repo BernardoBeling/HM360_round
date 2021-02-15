@@ -1091,7 +1091,7 @@ Void TEncCu::xCompressCU( TComDataCU*& rpcBestCU, TComDataCU*& rpcTempCU, const 
                                                                                                                                                        // with sub partitioned prediction.
     }
   }
-  }//end if split
+  }//end if splitCU
   
   DEBUG_STRING_APPEND(sDebug_, sDebug);
 

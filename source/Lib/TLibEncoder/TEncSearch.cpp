@@ -48,6 +48,12 @@
 //! \ingroup TLibEncoder
 //! \{
 
+extern int m64[100][35];
+extern int m32[100][35];
+extern int m16[100][35];
+extern int m8[100][35];
+extern int m4[100][35];
+
 static const TComMv s_acMvRefineH[9] =
 {
   TComMv(  0,  0 ), // 0
@@ -2293,14 +2299,91 @@ TEncSearch::estIntraPredLumaQT(TComDataCU* pcCU,
 
         CandNum += xUpdateCandList( uiMode, cost, numModesForFullRD, uiRdModeList, CandCostList );
       }
-
+      
+//Bernardo Beling - Extrair lista RMD
+      switch (uiWidthBit) {
+        case 5:            
+//            cout<<"RMD64X64 = ";
+//            for(int i=0; i<numModesForFullRD;i++)
+//                cout<<uiRdModeList[i]<<", ";
+//            cout<<endl;
+        break;
+        
+        case 4:
+//            cout<<"RMD32X32 = ";
+//            for(int i=0; i<numModesForFullRD;i++)
+//                cout<<uiRdModeList[i]<<", ";
+//            cout<<endl;                
+        break;
+        
+        case 3:
+//           cout<<"RMD16X16 = ";
+//            for(int i=0; i<numModesForFullRD;i++)
+//                cout<<uiRdModeList[i]<<", ";
+//            cout<<endl;                 
+        break;
+        
+        case 2:
+//          cout<<"RMD8X8 = ";
+//            for(int i=0; i<numModesForFullRD;i++)
+//                cout<<uiRdModeList[i]<<", ";
+//            cout<<endl;                 
+        break;
+        
+        case 1:
+//          cout<<"RMD4X4 = ";
+//            for(int i=0; i<numModesForFullRD;i++)
+//                cout<<uiRdModeList[i]<<", ";
+//            cout<<endl;                 
+        break;
+    }
+//FIM LISTA RMD
       if (m_pcEncCfg->getFastUDIUseMPMEnabled())
       {
         Int uiPreds[NUM_MOST_PROBABLE_MODES] = {-1, -1, -1};
 
         Int iMode = -1;
         pcCU->getIntraDirPredictor( uiPartOffset, uiPreds, COMPONENT_Y, &iMode );
-
+        
+//Bernardo Beling - Extrair lista MPMs        
+        switch (uiWidthBit) {
+        case 5:             
+//            cout<<"MPM64X64 = ";
+//            for(int i=0; i<NUM_MOST_PROBABLE_MODES;i++)
+//                cout<<uiPreds[i]<<", ";
+//            cout<<endl;
+        break;
+        
+        case 4: 
+//            cout<<"MPM32X32 = ";
+//            for(int i=0; i<NUM_MOST_PROBABLE_MODES;i++)
+//                cout<<uiPreds[i]<<", ";
+//            cout<<endl;
+        break;
+        
+        case 3:
+            cout<<"MPM16X16 = ";
+            for(int i=0; i<NUM_MOST_PROBABLE_MODES;i++)
+                cout<<uiPreds[i]<<", ";
+            cout<<endl;              
+        break;
+        
+        case 2:
+//            cout<<"MPM8X8 = ";
+//            for(int i=0; i<NUM_MOST_PROBABLE_MODES;i++)
+//                cout<<uiPreds[i]<<", ";
+//            cout<<endl;             
+        break;
+        
+        case 1:
+//            cout<<"MPM4X4 = ";
+//            for(int i=0; i<NUM_MOST_PROBABLE_MODES;i++)
+//                cout<<uiPreds[i]<<", ";
+//            cout<<endl;               
+        break;
+    }
+//FIM LISTA MPMS
+        
         const Int numCand = ( iMode >= 0 ) ? iMode : Int(NUM_MOST_PROBABLE_MODES);
 
         for( Int j=0; j < numCand; j++)
@@ -2526,6 +2609,71 @@ TEncSearch::estIntraPredLumaQT(TComDataCU* pcCU,
 
     //=== update PU data ====
     pcCU->setIntraDirSubParts     ( CHANNEL_TYPE_LUMA, uiBestPUMode, uiPartOffset, uiDepth + uiInitTrDepth );
+    
+    /*      BERNARDO BELING - CONTAGEM MODOS INTRA
+     * uiWidthbit
+     * 1 = 4x4
+     * 2 = 8x8
+     * 3 = 16x16
+     * 4 = 32x32
+     * 5 = 64x64
+     */
+        
+    int ctuRow = pcCU->getCtuRsAddr()/pcCU->getPic()->getFrameWidthInCtus();    
+   
+    switch (uiWidthBit) {
+        case 5:
+            m64[ctuRow][uiBestPUMode] += 1;//uiRdModeList[0];
+//            cout<<"RMD+MPM64X64 = ";
+//            for(int i=0; i<numModesForFullRD;i++)
+//                cout<<uiRdModeList[i]<<", ";
+//            cout<<endl;
+//            cout<<"BESTMODE = "<<uiBestPUMode<<endl;
+//            cout<<"========================="<<endl;
+        break;
+        
+        case 4:
+            m32[ctuRow][uiBestPUMode] += 1;//uiRdModeList[0];
+//            cout<<"RMD+MPM32X32 = ";
+//            for(int i=0; i<numModesForFullRD;i++)
+//                cout<<uiRdModeList[i]<<", ";
+//            cout<<endl;
+//            cout<<"BESTMODE = "<<uiBestPUMode<<endl;
+//            cout<<"========================="<<endl;
+        break;
+        
+        case 3:
+            m16[ctuRow][uiBestPUMode] += 1;//uiRdModeList[0]; 
+//            cout<<"RMD+MPM16X16 = ";
+//            for(int i=0; i<35;i++)
+//                cout<<uiRdModeList[i]<<", ";
+//            cout<<endl;
+//            cout<<"BESTMODE = "<<uiBestPUMode<<endl;
+//            cout<<"========================="<<endl;
+        break;
+        
+        case 2:
+            m8[ctuRow][uiBestPUMode] += 1;//uiRdModeList[0];
+//            cout<<"RMD+MPM8X8 = ";
+//            for(int i=0; i<numModesForFullRD;i++)
+//                cout<<uiRdModeList[i]<<", ";
+//            cout<<endl;
+//            cout<<"BESTMODE = "<<uiBestPUMode<<endl;
+//            cout<<"========================="<<endl;
+        break;
+        
+        case 1:
+            m4[ctuRow][uiBestPUMode] += 1;//uiRdModeList[0]; 
+//            cout<<"RMD+MPM4X4 = ";
+//            for(int i=0; i<numModesForFullRD;i++)
+//                cout<<uiRdModeList[i]<<", ";
+//            cout<<endl;
+//            cout<<"BESTMODE = "<<uiBestPUMode<<endl;
+//            cout<<"========================="<<endl;
+        break;
+    }
+//FIM CONTAGEM MODOS INTRA
+    
   } while (tuRecurseWithPU.nextSection(tuRecurseCU));
 
 

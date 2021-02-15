@@ -55,6 +55,11 @@ float balanceMatrix[4][4] = {{0.667,0.333,0,0},{0.5,0.333,0.167,0},{0.4,0.3,0.2,
 float* semigopVec[semiGOP];
 double v4K[26] = {1,1,1,1,0.9330,0.6215,0.4142,0.2704,0.1685,0.0966,0.0474,0.0167,0.0018,0.0018,0.0167,0.0474,0.0966,0.1685,0.2704,0.4142,0.6215,0.9330,1,1,1,1};
 double v8K[32] = {1,1,1,1,1,0.9451,0.6787,0.4891,0.3496,0.2450,0.1659,0.1062,0.0621,0.0309,0.0109,0.0012,0.0012,0.0109,0.0309,0.0621,0.1062,0.1659,0.2450,0.3496,0.4891,0.6787,0.9451,1,1,1,1,1};
+int m64[100][35];
+int m32[100][35];
+int m16[100][35];
+int m8[100][35];
+int m4[100][35];
 
 int main(int argc, char* argv[])
 { 
@@ -118,7 +123,39 @@ int main(int argc, char* argv[])
   printf("\n Total Time: %12.3f sec.\n", dResult);
 
   // destroy application encoder class
-  cTAppEncTop.destroy();    
+  cTAppEncTop.destroy(); 
+  
+  int resY = 2048;
+  cout<<"-----------------------MODES 64x64-----------------------"<<endl;   
+  for(int i=0;i<resY/64;i++) {        
+    for(int j=0;j<35;j++)                     
+        cout << m64[i][j] << ",";             
+    cout << "\n";      
+  }
+   cout<<"-----------------------MODES 32x32-----------------------"<<endl;   
+   for(int i=0;i<resY/64;i++) {        
+    for(int j=0;j<35;j++)                     
+        cout << m32[i][j] << ",";             
+    cout << "\n";      
+  }
+   cout<<"-----------------------MODES 16x16-----------------------"<<endl;   
+   for(int i=0;i<resY/64;i++) {        
+    for(int j=0;j<35;j++)                     
+        cout << m16[i][j] << ",";             
+    cout << "\n";      
+  }
+   cout<<"-----------------------MODES 8x8-----------------------"<<endl;   
+   for(int i=0;i<resY/64;i++) {        
+    for(int j=0;j<35;j++)                     
+        cout << m8[i][j] << ",";             
+    cout << "\n";      
+  }
+   cout<<"-----------------------MODES 4x4-----------------------"<<endl;   
+   for(int i=0;i<resY/64;i++) {        
+    for(int j=0;j<35;j++)                     
+        cout << m4[i][j] << ",";             
+    cout << "\n";      
+  }  
 
   return 0;
 }
