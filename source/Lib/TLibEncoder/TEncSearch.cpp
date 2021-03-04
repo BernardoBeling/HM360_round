@@ -45,6 +45,7 @@
 #include <limits>
 
 
+extern IntraData m64[mSize][mSize];
 //! \ingroup TLibEncoder
 //! \{
 
@@ -2348,7 +2349,7 @@ TEncSearch::estIntraPredLumaQT(TComDataCU* pcCU,
 #else
     for( UInt uiMode = 0; uiMode < numModesForFullRD; uiMode++ )
 #endif
-    {
+    {        
       // set luma prediction mode
       UInt uiOrgMode = uiRdModeList[uiMode];
 
@@ -2526,6 +2527,18 @@ TEncSearch::estIntraPredLumaQT(TComDataCU* pcCU,
 
     //=== update PU data ====
     pcCU->setIntraDirSubParts     ( CHANNEL_TYPE_LUMA, uiBestPUMode, uiPartOffset, uiDepth + uiInitTrDepth );
+    
+    /**************Bernardo Beling intradata class**********************/
+    int posY = pcCU->getCtuRsAddr()/pcCU->getPic()->getFrameWidthInCtus();
+    int posX = pcCU->getCtuRsAddr()-posY*pcCU->getPic()->getFrameWidthInCtus();
+    
+    switch (uiWidthBit){
+        case 5:
+            m64[posY][posX].setBestMode(uiBestPUMode);            
+            break;
+        
+    }
+    /**************End intradata class**********************/
   } while (tuRecurseWithPU.nextSection(tuRecurseCU));
 
 

@@ -59,6 +59,42 @@ static const UInt NUM_MOST_PROBABLE_MODES=3;
 // ====================================================================================================================
 // Class definition
 // ====================================================================================================================
+/***************Bernardo Beling IntraData class******************/
+class IntraData
+{
+private:
+    
+    Int m_posV;   //Block vertical position
+    Int m_posH;   //Block horizontal position
+    Int m_variance;   //Block luma variance
+    Int m_size;   //Block size
+    Int m_bestMode;   //Block best prediction mode selected
+    Int m_frame;  //Block current frame
+    Int* m_candModesList;     //Block MPMs+RMD modes list
+    
+public: 
+    
+    IntraData(){        
+    }
+    
+
+    
+    Int getPosV(){  return m_posV; }
+    Int getPosH(){  return m_posH; }
+    Int getSize(){  return m_size; }
+    Int getVariance(){  return m_variance;    }
+    Int getBestMode(){  return m_bestMode;    }
+    Int getFrame(){  return m_frame;  }
+    Int* getCandModesList(){    return m_candModesList;   }
+    
+    void setPosV (int posV){   m_posV = posV; }
+    void setPosH (int posH){   m_posH = posH; }
+    void setSize (int size){ m_size = size;    }
+    void setFrame (int frame){ m_frame = frame;  }
+    void setBestMode (int bestMode){    m_bestMode = bestMode;  }
+
+};
+/*********END IntraData class*************/
 
 /// CU data structure class
 class TComDataCU

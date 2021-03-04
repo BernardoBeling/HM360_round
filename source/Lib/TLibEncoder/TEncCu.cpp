@@ -46,6 +46,7 @@
 using namespace std;
 extern float depthMatrix[DM_Y][DM_X],balanceMatrix[4][4],*semigopVec[semiGOP];
 extern double v4K[26],v8K[32];
+extern IntraData m64[mSize][mSize];
 
 //! \ingroup TLibEncoder
 //! \{
@@ -547,16 +548,17 @@ Void TEncCu::xCompressCU( TComDataCU*& rpcBestCU, TComDataCU*& rpcTempCU, const 
   Int iMaxQP;
   Bool isAddLowestQP = false;
   
-  /************************Modificações***************************/  
+  /************************Bernardo Beling Early Termination***************************/  
   bool splitCU = true;
   int semigopFrame = rpcBestCU->getPic()->getPOC() % semiGOP;
+  int frame = rpcBestCU->getPic()->getPOC();
   int resV = rpcBestCU->getPic()->getFrameHeightInCtus()*64; 
+  int posY = rpcBestCU->getCtuRsAddr()/rpcBestCU->getPic()->getFrameWidthInCtus();
+  int posX = rpcBestCU->getCtuRsAddr()-posY*rpcBestCU->getPic()->getFrameWidthInCtus();
+  
   
   if(semigopFrame != 0) {
-      int rounded = 0;
-      int posY = rpcBestCU->getCtuRsAddr()/rpcBestCU->getPic()->getFrameWidthInCtus();
-      int posX = rpcBestCU->getCtuRsAddr()-posY*rpcBestCU->getPic()->getFrameWidthInCtus();
-      
+      int rounded = 0;            
       if(resV == 1664)
         rounded = roundDepth(depthMatrix[posY][posX],v4K[posY]); 
       else
@@ -572,9 +574,22 @@ Void TEncCu::xCompressCU( TComDataCU*& rpcBestCU, TComDataCU*& rpcTempCU, const 
         }
         else 
            splitCU = false;       
-      }                
+      }            
   }  
-  /*****************************FIM*******************************/
+  /*****************************End Early Termination*******************************/
+  
+  /************************Bernardo Beling IntraData class*****************************/
+  switch(uiDepth){
+          case 0:
+              m64[posY][posX].setSize(uiDepth);
+              m64[posY][posX].setPosV(posY);
+              m64[posY][posX].setPosH(posX);
+              m64[posY][posX].setFrame(frame);
+              splitCU = false;
+              break;
+  }
+  
+  /************************End IntraData class*****************************************/
   
   const UInt numberValidComponents = rpcBestCU->getPic()->getNumberValidComponents();
 
