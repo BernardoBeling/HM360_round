@@ -56,7 +56,11 @@ float balanceMatrix[4][4] = {{0.667,0.333,0,0},{0.5,0.333,0.167,0},{0.4,0.3,0.2,
 float* semigopVec[semiGOP];
 double v4K[26] = {1,1,1,1,0.9330,0.6215,0.4142,0.2704,0.1685,0.0966,0.0474,0.0167,0.0018,0.0018,0.0167,0.0474,0.0966,0.1685,0.2704,0.4142,0.6215,0.9330,1,1,1,1};
 double v8K[32] = {1,1,1,1,1,0.9451,0.6787,0.4891,0.3496,0.2450,0.1659,0.1062,0.0621,0.0309,0.0109,0.0012,0.0012,0.0109,0.0309,0.0621,0.1062,0.1659,0.2450,0.3496,0.4891,0.6787,0.9451,1,1,1,1,1};
-IntraData m64[mSize][mSize];
+IntraData m64[mSizeY][mSizeX];
+IntraData m32[mSizeY][mSizeX];
+IntraData m16[mSizeY][mSizeX];
+IntraData m8[mSizeY][mSizeX];
+IntraData m4[mSizeY][mSizeX];
 
 int main(int argc, char* argv[])
 { 

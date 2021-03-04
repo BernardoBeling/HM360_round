@@ -46,7 +46,7 @@
 using namespace std;
 extern float depthMatrix[DM_Y][DM_X],balanceMatrix[4][4],*semigopVec[semiGOP];
 extern double v4K[26],v8K[32];
-extern IntraData m64[mSize][mSize];
+extern IntraData m64[mSizeY][mSizeX];
 
 //! \ingroup TLibEncoder
 //! \{

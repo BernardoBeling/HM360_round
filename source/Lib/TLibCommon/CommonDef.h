@@ -248,7 +248,8 @@ static const UInt LUMA_LEVEL_TO_DQP_LUT_MAXSIZE =                1024; ///< max 
 static const int DM_Y = 100;
 static const int DM_X = 200;
 
-static const int mSize = 1000;
+static const int mSizeX = 1024;
+static const int mSizeY = 512;
 
 static const int semiGOP = 5;
 static const float roundConst = 0.6;

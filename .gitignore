@@ -1,4 +1,4 @@
-*objects/
+
 bin/
 lib/
 nbproject
@@ -6,6 +6,4 @@ HM.xcodeproj
 .cproject
 .project
 .settings/
-*~
-
-
+.svn/

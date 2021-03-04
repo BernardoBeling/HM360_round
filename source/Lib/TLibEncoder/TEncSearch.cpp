@@ -45,7 +45,7 @@
 #include <limits>
 
 
-extern IntraData m64[mSize][mSize];
+extern IntraData m64[mSizeY][mSizeX];
 //! \ingroup TLibEncoder
 //! \{
 

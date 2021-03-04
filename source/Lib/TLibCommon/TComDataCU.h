@@ -77,8 +77,6 @@ public:
     IntraData(){        
     }
     
-
-    
     Int getPosV(){  return m_posV; }
     Int getPosH(){  return m_posH; }
     Int getSize(){  return m_size; }
