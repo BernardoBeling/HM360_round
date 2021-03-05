@@ -41,6 +41,7 @@
 
 #include <algorithm>
 #include <vector>
+#include <fstream>
 
 // Include files
 #include "CommonDef.h"
@@ -69,12 +70,15 @@ private:
     Int m_variance;   //Block luma variance
     Int m_size;   //Block size
     Int m_bestMode;   //Block best prediction mode selected
+    Int m_bestModeCost;     //Block best prediction mode RD-Cost
     Int m_frame;  //Block current frame
-    Int* m_candModesList;     //Block MPMs+RMD modes list
+    Int m_rmdList[rmdList] = {-1,-1,-1,-1,-1,-1,-1,-1};     //Block RMD modes list
+    Int m_mpmList[mpmList] = {-1,-1,-1};     //Block MPMs list
     
 public: 
     
-    IntraData(){        
+    IntraData(){
+       
     }
     
     Int getPosV(){  return m_posV; }
@@ -82,15 +86,32 @@ public:
     Int getSize(){  return m_size; }
     Int getVariance(){  return m_variance;    }
     Int getBestMode(){  return m_bestMode;    }
+    Double getBestModeCost(){  return m_bestModeCost;    }
     Int getFrame(){  return m_frame;  }
-    Int* getCandModesList(){    return m_candModesList;   }
+    Int getRmdList(int i){    return m_rmdList[i];   }
+    Int getMpmList(int i){    return m_mpmList[i];   }
     
     void setPosV (int posV){   m_posV = posV; }
     void setPosH (int posH){   m_posH = posH; }
     void setSize (int size){ m_size = size;    }
     void setFrame (int frame){ m_frame = frame;  }
     void setBestMode (int bestMode){    m_bestMode = bestMode;  }
+    void setBestModeCost (int bestModeCost){    m_bestModeCost = bestModeCost;  }
+    void setRmdList (int mode, int i){    m_rmdList[i] = mode;  }
+    void setMpmList (int mode, int i){    m_mpmList[i] = mode;  }
+    void printToCsv(ofstream& file){
+        file << m_frame << "," << m_posV << "," << m_posH 
+            << "," << m_size << "," << m_bestMode << "," 
+            << m_bestModeCost << ",";
+    
+        for(int i=0; i<mpmList; i++)
+            file << m_mpmList[i] << ",";
+        for(int i=0; i<rmdList; i++)
+            file << m_rmdList[i] << ",";
 
+        file << endl;
+    }
+    
 };
 /*********END IntraData class*************/
 

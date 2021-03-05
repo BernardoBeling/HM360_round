@@ -46,6 +46,12 @@
 
 
 extern IntraData m64[mSizeY][mSizeX];
+extern IntraData m64[mSizeY][mSizeX];
+extern IntraData m32[mSizeY][mSizeX];
+extern IntraData m16[mSizeY][mSizeX];
+extern IntraData m8[mSizeY][mSizeX];
+extern IntraData m4[mSizeY][mSizeX];
+extern ofstream intraDataFile;
 //! \ingroup TLibEncoder
 //! \{
 
@@ -2295,13 +2301,104 @@ TEncSearch::estIntraPredLumaQT(TComDataCU* pcCU,
         CandNum += xUpdateCandList( uiMode, cost, numModesForFullRD, uiRdModeList, CandCostList );
       }
 
+      //PRINT RMDS
+//     if( uiWidthBit == 5 ){
+//          cout<<"RMD64X64 = ";
+//            for(int i=0; i<numModesForFullRD;i++)
+//                cout<<uiRdModeList[i]<<", ";
+//            cout<<endl;
+//      }
+    /**************Bernardo Beling intradata class**********************/ 
+    //Frame info, block size, RMD list
+    int posY = pcCU->getCtuRsAddr()/pcCU->getPic()->getFrameWidthInCtus();
+    int posX = pcCU->getCtuRsAddr()-posY*pcCU->getPic()->getFrameWidthInCtus();
+    int frame = pcCU->getPic()->getPOC();
+    
+    switch (uiWidthBit){
+        case 5:
+            m64[posY][posX].setSize(0);
+            m64[posY][posX].setPosV(posY);
+            m64[posY][posX].setPosH(posX);
+            m64[posY][posX].setFrame(frame);             
+            for(int i = 0; i< numModesForFullRD; i++) 
+                m64[posY][posX].setRmdList(uiRdModeList[i], i); //RMD            
+            break;
+        case 4:
+            m32[posY][posX].setSize(1);
+            m32[posY][posX].setPosV(posY);
+            m32[posY][posX].setPosH(posX);
+            m32[posY][posX].setFrame(frame);            
+            for(int i = 0; i< numModesForFullRD; i++) 
+                m32[posY][posX].setRmdList(uiRdModeList[i], i); //RMD                          
+            break;
+        case 3:
+            m16[posY][posX].setSize(2);
+            m16[posY][posX].setPosV(posY);
+            m16[posY][posX].setPosH(posX);
+            m16[posY][posX].setFrame(frame);            
+            for(int i = 0; i< numModesForFullRD; i++) 
+                m16[posY][posX].setRmdList(uiRdModeList[i], i); //RMD                          
+            break;
+        case 2:
+            m8[posY][posX].setSize(3);
+            m8[posY][posX].setPosV(posY);
+            m8[posY][posX].setPosH(posX);
+            m8[posY][posX].setFrame(frame);            
+            for(int i = 0; i< numModesForFullRD; i++) 
+                m8[posY][posX].setRmdList(uiRdModeList[i], i); //RMD                         
+            break;   
+        case 1:
+            m4[posY][posX].setSize(4);
+            m4[posY][posX].setPosV(posY);
+            m4[posY][posX].setPosH(posX);
+            m4[posY][posX].setFrame(frame);            
+            for(int i = 0; i< numModesForFullRD; i++) 
+                m4[posY][posX].setRmdList(uiRdModeList[i], i); //RMD
+                          
+            break;
+    }
+    /**************End intradata class**********************/
+      
       if (m_pcEncCfg->getFastUDIUseMPMEnabled())
       {
         Int uiPreds[NUM_MOST_PROBABLE_MODES] = {-1, -1, -1};
 
         Int iMode = -1;
         pcCU->getIntraDirPredictor( uiPartOffset, uiPreds, COMPONENT_Y, &iMode );
-
+                
+         //PRINT MPMS
+//      if( uiWidthBit == 5 ){
+//          cout<<"MPM64X64 = ";
+//            for(int i=0; i<NUM_MOST_PROBABLE_MODES;i++)
+//                cout<<uiPreds[i]<<", ";
+//            cout<<endl;
+//      }
+    /**************Bernardo Beling intradata class**********************/ 
+    //MPM list
+    switch (uiWidthBit){
+        case 5:           
+            for(int i=0; i<NUM_MOST_PROBABLE_MODES;i++)
+                m64[posY][posX].setMpmList(uiPreds[i], i); //MPM
+            break;
+        case 4:            
+            for(int i=0; i<NUM_MOST_PROBABLE_MODES;i++)
+                m32[posY][posX].setMpmList(uiPreds[i], i); //MPM               
+            break;
+        case 3:            
+            for(int i=0; i<NUM_MOST_PROBABLE_MODES;i++)
+                m16[posY][posX].setMpmList(uiPreds[i], i); //MPM               
+            break;
+        case 2:                        
+            for(int i=0; i<NUM_MOST_PROBABLE_MODES;i++)
+                m8[posY][posX].setMpmList(uiPreds[i], i); //MPM               
+            break;   
+        case 1:                       
+            for(int i=0; i<NUM_MOST_PROBABLE_MODES;i++)
+                m4[posY][posX].setMpmList(uiPreds[i], i); //MPM               
+            break;
+    }
+    /**************End intradata class**********************/
+        
         const Int numCand = ( iMode >= 0 ) ? iMode : Int(NUM_MOST_PROBABLE_MODES);
 
         for( Int j=0; j < numCand; j++)
@@ -2529,14 +2626,36 @@ TEncSearch::estIntraPredLumaQT(TComDataCU* pcCU,
     pcCU->setIntraDirSubParts     ( CHANNEL_TYPE_LUMA, uiBestPUMode, uiPartOffset, uiDepth + uiInitTrDepth );
     
     /**************Bernardo Beling intradata class**********************/
+    // BestMode and BestMode RD-Cost
     int posY = pcCU->getCtuRsAddr()/pcCU->getPic()->getFrameWidthInCtus();
-    int posX = pcCU->getCtuRsAddr()-posY*pcCU->getPic()->getFrameWidthInCtus();
+    int posX = pcCU->getCtuRsAddr()-posY*pcCU->getPic()->getFrameWidthInCtus();    
     
     switch (uiWidthBit){
-        case 5:
-            m64[posY][posX].setBestMode(uiBestPUMode);            
+        case 5:            
+            m64[posY][posX].setBestMode(uiBestPUMode); 
+            m64[posY][posX].setBestModeCost(dBestPUCost);
+            m64[posY][posX].printToCsv(intraDataFile);
             break;
-        
+        case 4:            
+            m32[posY][posX].setBestMode(uiBestPUMode);
+            m32[posY][posX].setBestModeCost(dBestPUCost);                           
+            m32[posY][posX].printToCsv(intraDataFile);
+            break;
+        case 3:            
+            m16[posY][posX].setBestMode(uiBestPUMode);
+            m16[posY][posX].setBestModeCost(dBestPUCost);                          
+            m16[posY][posX].printToCsv(intraDataFile);
+            break;
+        case 2:            
+            m8[posY][posX].setBestMode(uiBestPUMode);
+            m8[posY][posX].setBestModeCost(dBestPUCost);                          
+            m8[posY][posX].printToCsv(intraDataFile);
+            break;   
+        case 1:            
+            m4[posY][posX].setBestMode(uiBestPUMode);
+            m4[posY][posX].setBestModeCost(dBestPUCost);                          
+            m4[posY][posX].printToCsv(intraDataFile);
+            break;
     }
     /**************End intradata class**********************/
   } while (tuRecurseWithPU.nextSection(tuRecurseCU));

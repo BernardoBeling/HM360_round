@@ -250,6 +250,8 @@ static const int DM_X = 200;
 
 static const int mSizeX = 1024;
 static const int mSizeY = 512;
+static const int rmdList = 8;
+static const int mpmList = 3;
 
 static const int semiGOP = 5;
 static const float roundConst = 0.6;

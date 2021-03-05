@@ -39,9 +39,6 @@
 #include "TEncSlice.h"
 #include <math.h>
 
-
-extern IntraData m64[mSizeY][mSizeX];
-
 //! \ingroup TLibEncoder
 //! \{
 
@@ -961,17 +958,7 @@ Void TEncSlice::compressSlice( TComPic* pcPic, const Bool bCompressEntireSlice, 
 
     m_uiPicTotalBits += pCtu->getTotalBits();
     m_dPicRdCost     += pCtu->getTotalCost();
-    m_uiPicDist      += pCtu->getTotalDistortion();
-    
-    /***************************Bernardo Beling IntraData Class*********************************************/
-    int posY = ctuRsAddr / frameWidthInCtus;
-    int posX = ctuRsAddr - posY * frameWidthInCtus;
-    
-    cout << "Frame:" << m64[posY][posX].getFrame() << "  posY:" << m64[posY][posX].getPosV() << "  posX:" <<
-            m64[posY][posX].getPosH() << "  Size:" << m64[posY][posX].getSize() << "  Bestmode:" 
-            << m64[posY][posX].getBestMode() << endl;
-            
-    /***************************End IntraData Class*********************************************/
+    m_uiPicDist      += pCtu->getTotalDistortion();       
   }
 
   // store context state at the end of this slice-segment, in case the next slice is a dependent slice and continues using the CABAC contexts.
