@@ -44,6 +44,7 @@
 #include <cmath>
 #include <algorithm>
 using namespace std;
+
 extern float depthMatrix[DM_Y][DM_X],balanceMatrix[4][4],*semigopVec[semiGOP];
 extern double v4K[26],v8K[32];
 extern IntraData m64[mSizeY][mSizeX];
@@ -51,6 +52,7 @@ extern IntraData m32[mSizeY][mSizeX];
 extern IntraData m16[mSizeY][mSizeX];
 extern IntraData m8[mSizeY][mSizeX];
 extern IntraData m4[mSizeY][mSizeX];
+
 //! \ingroup TLibEncoder
 //! \{
 
@@ -580,6 +582,7 @@ Void TEncCu::xCompressCU( TComDataCU*& rpcBestCU, TComDataCU*& rpcTempCU, const 
   }  
   /*****************************End Early Termination*******************************/
   
+  
   const UInt numberValidComponents = rpcBestCU->getPic()->getNumberValidComponents();
 
   if( uiDepth <= pps.getMaxCuDQPDepth() )
@@ -859,8 +862,7 @@ Void TEncCu::xCompressCU( TComDataCU*& rpcBestCU, TComDataCU*& rpcTempCU, const 
             )))
         {
           xCheckRDCostIntra( rpcBestCU, rpcTempCU, SIZE_2Nx2N DEBUG_STRING_PASS_INTO(sDebug) );
-          rpcTempCU->initEstData( uiDepth, iQP, bIsLosslessMode );
-                  
+          rpcTempCU->initEstData( uiDepth, iQP, bIsLosslessMode );                  
             if( uiDepth == sps.getLog2DiffMaxMinCodingBlockSize() )
             {
               if( rpcTempCU->getWidth(0) > ( 1 << sps.getQuadtreeTULog2MinSize() ) )
@@ -1640,7 +1642,7 @@ Void TEncCu::xCheckRDCostIntra( TComDataCU *&rpcBestCU,
   rpcTempCU->getTotalBits() = m_pcEntropyCoder->getNumberOfWrittenBits();
   rpcTempCU->getTotalBins() = ((TEncBinCABAC *)((TEncSbac*)m_pcEntropyCoder->m_pcEntropyCoderIf)->getEncBinIf())->getBinsCoded();
   rpcTempCU->getTotalCost() = m_pcRdCost->calcRdCost( rpcTempCU->getTotalBits(), rpcTempCU->getTotalDistortion() );
-
+    
   xCheckDQP( rpcTempCU );
 
   xCheckBestMode(rpcBestCU, rpcTempCU, uiDepth DEBUG_STRING_PASS_INTO(sDebug) DEBUG_STRING_PASS_INTO(sTest));

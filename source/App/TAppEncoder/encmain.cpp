@@ -52,6 +52,7 @@
 // Main function
 // ====================================================================================================================
 
+Int** samplesMatrix;
 float depthMatrix[DM_Y][DM_X];
 float balanceMatrix[4][4] = {{0.667,0.333,0,0},{0.5,0.333,0.167,0},{0.4,0.3,0.2,0.1},{0}};
 float* semigopVec[semiGOP];
@@ -66,7 +67,7 @@ ofstream intraDataFile;
 
 int main(int argc, char* argv[])
 { 
-  //instanciando as matrizes em cada posicao do vetor
+  //instancing matrices on each position in the array
   for(int i=0;i<semiGOP;i++){      
     float **tempMatrix = new float*[DM_Y];
         for(int j=0;j<DM_Y;j++){
@@ -76,7 +77,8 @@ int main(int argc, char* argv[])
   }
   
   intraDataFile.open("intraDataFile.csv");
-  intraDataFile << "Frame,PosY,PosX,Size,BestMode,BestModeCost,MPM1,MPM2,MPM3,RMD1,RMD2,RMD3,RMD4,RMD5,RMD6,RMD7,RMD8" << endl;
+  intraDataFile << "Frame,PosY,PosX,Size,BestMode,BestModeCost,Variance,coCost,AboveCost,LeftCost,AboveLeftCost,AboveRightCost,"
+          "MPM1,MPM2,MPM3,RMD1,RMD2,RMD3,RMD4,RMD5,RMD6,RMD7,RMD8" << endl;
   
   TAppEncTop  cTAppEncTop;
   

@@ -42,6 +42,7 @@
 #include "TLibCommon/TComTU.h"
 #include "TLibCommon/Debug.h"
 #include <math.h>
+#include <cmath>
 #include <limits>
 
 
@@ -52,6 +53,18 @@ extern IntraData m16[mSizeY][mSizeX];
 extern IntraData m8[mSizeY][mSizeX];
 extern IntraData m4[mSizeY][mSizeX];
 extern ofstream intraDataFile;
+extern Int** samplesMatrix;
+
+float calculateVar(TComDataCU* currCU);
+void collectIntraData(IntraData m[][mSizeX], Double var, int bestMode, Double bestCost, Double coCost, Double aCost,
+        Double lcost, Double alCost, Double arCost, int pelY, int pelX, int resH, int posY, int posX, int frame, int size);
+
+Double mc64[mSizeX][mSizeY];
+Double mc32[mSizeX][mSizeY];
+Double mc16[mSizeX][mSizeY];
+Double mc8[mSizeX][mSizeY];
+Double mc4[mSizeX][mSizeY];
+
 //! \ingroup TLibEncoder
 //! \{
 
@@ -2309,52 +2322,38 @@ TEncSearch::estIntraPredLumaQT(TComDataCU* pcCU,
 //            cout<<endl;
 //      }
     /**************Bernardo Beling intradata class**********************/ 
-    //Frame info, block size, RMD list
-    int posY = pcCU->getCtuRsAddr()/pcCU->getPic()->getFrameWidthInCtus();
-    int posX = pcCU->getCtuRsAddr()-posY*pcCU->getPic()->getFrameWidthInCtus();
-    int frame = pcCU->getPic()->getPOC();
+    //Frame info, block size, RMD list       
+    int pelX = pcCU->getCUPelX();
+    int pelY = pcCU->getCUPelY();    
     
     switch (uiWidthBit){
-        case 5:
-            m64[posY][posX].setSize(0);
-            m64[posY][posX].setPosV(posY);
-            m64[posY][posX].setPosH(posX);
-            m64[posY][posX].setFrame(frame);             
+        case 5:                       
             for(int i = 0; i< numModesForFullRD; i++) 
-                m64[posY][posX].setRmdList(uiRdModeList[i], i); //RMD            
+                m64[pelY/64][pelX/64].setRmdList(uiRdModeList[i], i); //RMD 
+            //cout << "Size 0 ";
             break;
-        case 4:
-            m32[posY][posX].setSize(1);
-            m32[posY][posX].setPosV(posY);
-            m32[posY][posX].setPosH(posX);
-            m32[posY][posX].setFrame(frame);            
+        case 4:                                  
             for(int i = 0; i< numModesForFullRD; i++) 
-                m32[posY][posX].setRmdList(uiRdModeList[i], i); //RMD                          
+                m32[pelY/32][pelX/32].setRmdList(uiRdModeList[i], i); //RMD 
+            //cout << "Size 1 ";
             break;
-        case 3:
-            m16[posY][posX].setSize(2);
-            m16[posY][posX].setPosV(posY);
-            m16[posY][posX].setPosH(posX);
-            m16[posY][posX].setFrame(frame);            
+        case 3:                                    
             for(int i = 0; i< numModesForFullRD; i++) 
-                m16[posY][posX].setRmdList(uiRdModeList[i], i); //RMD                          
+                m16[pelY/16][pelX/16].setRmdList(uiRdModeList[i], i); //RMD 
+            //cout << "Size 2 ";
             break;
-        case 2:
-            m8[posY][posX].setSize(3);
-            m8[posY][posX].setPosV(posY);
-            m8[posY][posX].setPosH(posX);
-            m8[posY][posX].setFrame(frame);            
+        case 2:                                   
             for(int i = 0; i< numModesForFullRD; i++) 
-                m8[posY][posX].setRmdList(uiRdModeList[i], i); //RMD                         
+                m8[pelY/8][pelX/8].setRmdList(uiRdModeList[i], i); //RMD 
+            //cout << "Size 3 ";
             break;   
-        case 1:
-            m4[posY][posX].setSize(4);
-            m4[posY][posX].setPosV(posY);
-            m4[posY][posX].setPosH(posX);
-            m4[posY][posX].setFrame(frame);            
-            for(int i = 0; i< numModesForFullRD; i++) 
-                m4[posY][posX].setRmdList(uiRdModeList[i], i); //RMD
-                          
+        case 1:                                                
+            for(int i = 0; i< numModesForFullRD; i++){ 
+                m4[pelY/4][pelX/4].setRmdList(uiRdModeList[i], i); //RMD
+                m4[pelY/4][(pelX/4)+1].setRmdList(uiRdModeList[i], i); //RMD
+                m4[(pelY/4)+1][pelX/4].setRmdList(uiRdModeList[i], i); //RMD
+                m4[(pelY/4)+1][(pelX/4)+1].setRmdList(uiRdModeList[i], i); //RMD
+            }
             break;
     }
     /**************End intradata class**********************/
@@ -2378,23 +2377,27 @@ TEncSearch::estIntraPredLumaQT(TComDataCU* pcCU,
     switch (uiWidthBit){
         case 5:           
             for(int i=0; i<NUM_MOST_PROBABLE_MODES;i++)
-                m64[posY][posX].setMpmList(uiPreds[i], i); //MPM
+                m64[pelY/64][pelX/64].setMpmList(uiPreds[i], i); //MPM
             break;
         case 4:            
             for(int i=0; i<NUM_MOST_PROBABLE_MODES;i++)
-                m32[posY][posX].setMpmList(uiPreds[i], i); //MPM               
+                m32[pelY/32][pelX/32].setMpmList(uiPreds[i], i); //MPM               
             break;
         case 3:            
             for(int i=0; i<NUM_MOST_PROBABLE_MODES;i++)
-                m16[posY][posX].setMpmList(uiPreds[i], i); //MPM               
+                m16[pelY/16][pelX/16].setMpmList(uiPreds[i], i); //MPM               
             break;
         case 2:                        
             for(int i=0; i<NUM_MOST_PROBABLE_MODES;i++)
-                m8[posY][posX].setMpmList(uiPreds[i], i); //MPM               
+                m8[pelY/8][pelX/8].setMpmList(uiPreds[i], i); //MPM               
             break;   
-        case 1:                       
-            for(int i=0; i<NUM_MOST_PROBABLE_MODES;i++)
-                m4[posY][posX].setMpmList(uiPreds[i], i); //MPM               
+        case 1:                        
+            for(int i=0; i<NUM_MOST_PROBABLE_MODES;i++) {
+                m4[pelY/4][pelX/4].setMpmList(uiPreds[i], i); //MPM
+                m4[pelY/4][(pelX/4)+1].setMpmList(uiPreds[i], i); //MPM
+                m4[(pelY/4)+1][pelX/4].setMpmList(uiPreds[i], i); //MPM
+                m4[(pelY/4)+1][(pelX/4)+1].setMpmList(uiPreds[i], i); //MPM
+            }
             break;
     }
     /**************End intradata class**********************/
@@ -2625,36 +2628,86 @@ TEncSearch::estIntraPredLumaQT(TComDataCU* pcCU,
     //=== update PU data ====
     pcCU->setIntraDirSubParts     ( CHANNEL_TYPE_LUMA, uiBestPUMode, uiPartOffset, uiDepth + uiInitTrDepth );
     
-    /**************Bernardo Beling intradata class**********************/
+    /**************Bernardo Beling IntraData class**********************/
     // BestMode and BestMode RD-Cost
     int posY = pcCU->getCtuRsAddr()/pcCU->getPic()->getFrameWidthInCtus();
-    int posX = pcCU->getCtuRsAddr()-posY*pcCU->getPic()->getFrameWidthInCtus();    
+    int posX = pcCU->getCtuRsAddr()-posY*pcCU->getPic()->getFrameWidthInCtus();  
+    int pelX = pcCU->getCUPelX();
+    int pelY = pcCU->getCUPelY();
+    int resH = pcCU->getPic()->getFrameWidthInCtus();
+    int frame = pcCU->getPic()->getPOC();
+    //int ctuY = ((float)pelY/64 - pelY/64)*64;
+    //int ctuX = ((float)pelX/64 - pelX/64)*64;
+    
     
     switch (uiWidthBit){
         case 5:            
-            m64[posY][posX].setBestMode(uiBestPUMode); 
-            m64[posY][posX].setBestModeCost(dBestPUCost);
-            m64[posY][posX].printToCsv(intraDataFile);
+            collectIntraData(m64,calculateVar(pcCU),uiBestPUMode,dBestPUCost,mc64[posX][posY],mc64[posY-1][posX],
+                    mc64[posY][posX-1],mc64[posY-1][posX-1],mc64[posY-1][posX+1],posY,posX,resH,posY,posX,frame,0);
+            mc64[posY][posX] = dBestPUCost;
+//            cout<< "PelY:" << pelY << " PelX:" << pelX << " ctuY:" << ctuY << " ctuX:" << ctuX <<endl;
             break;
-        case 4:            
-            m32[posY][posX].setBestMode(uiBestPUMode);
-            m32[posY][posX].setBestModeCost(dBestPUCost);                           
-            m32[posY][posX].printToCsv(intraDataFile);
+        case 4:   
+            collectIntraData(m32,calculateVar(pcCU),uiBestPUMode,dBestPUCost,mc32[pelY/32][pelX/32],
+                    mc32[(pelY/32)-1][pelX/32],mc32[pelY/32][(pelX/32)-1],mc32[(pelY/32)-1][(pelX/32)-1],
+                    mc32[(pelY/32)-1][(pelX/32)+1],pelY/32,pelX/32,resH,posY,posX,frame,1);
+            mc32[pelY/32][pelX/32] = dBestPUCost;
+//            cout<< "PelY32:" << pelY/32 << " PelX32:" << pelX/32 << " ctuY:" << ctuY/32 << " ctuX:" << ctuX/32 <<endl;
             break;
-        case 3:            
-            m16[posY][posX].setBestMode(uiBestPUMode);
-            m16[posY][posX].setBestModeCost(dBestPUCost);                          
-            m16[posY][posX].printToCsv(intraDataFile);
+        case 3:    
+            collectIntraData(m16,calculateVar(pcCU),uiBestPUMode,dBestPUCost,mc16[pelY/16][pelX/16],
+                    mc16[(pelY/16)-1][pelX/16],mc16[pelY/16][(pelX/16)-1],mc16[(pelY/16)-1][(pelX/16)-1],
+                    mc16[(pelY/16)-1][(pelX/16)+1],pelY/16,pelX/16,resH,posY,posX,frame,2);
+            mc16[pelY/16][pelX/16] = dBestPUCost;
+//            cout<< "PelY:" << pelY << " PelX:" << pelX << " ctuY:" << ctuY/16 << " ctuX:" << ctuX/16 <<endl;
             break;
-        case 2:            
-            m8[posY][posX].setBestMode(uiBestPUMode);
-            m8[posY][posX].setBestModeCost(dBestPUCost);                          
-            m8[posY][posX].printToCsv(intraDataFile);
+        case 2:                        
+            collectIntraData(m8,calculateVar(pcCU),uiBestPUMode,dBestPUCost,mc8[pelY/8][pelX/8],
+                    mc8[(pelY/8)-1][pelX/8],mc8[pelY/8][(pelX/8)-1],mc8[(pelY/8)-1][(pelX/8)-1],
+                    mc8[(pelY/8)-1][(pelX/8)+1],pelY/8,pelX/8,resH,posY,posX,frame,3);
+            mc8[pelY/8][pelX/8] = dBestPUCost;
+//            cout<< "PelY:" << pelY << " PelX:" << pelX << " ctuY:" << ctuY/8 << " ctuX:" << ctuX/8 <<endl;
             break;   
-        case 1:            
-            m4[posY][posX].setBestMode(uiBestPUMode);
-            m4[posY][posX].setBestModeCost(dBestPUCost);                          
-            m4[posY][posX].printToCsv(intraDataFile);
+        case 1:             
+//            int pelY4 = (pelY/2) - 2 < 0 ? 0 : pelY/2 - 2;
+//            int pelX4 = (pelX/2) - 2 < 0 ? 0 : pelX/2 - 2; 
+            //cout<< "pelY4:" << pelY4 << " pelX4:" << pelX4 << endl;
+            int pelY4 = (pelY/4);
+            int pelX4 = (pelX/4);                     
+            switch (uiPartOffset){
+                case 0:
+                    collectIntraData(m4,calculateVar(pcCU),uiBestPUMode,dBestPUCost,mc4[pelY4][pelX4],
+                    mc4[pelY4-1][pelX4],mc4[pelY4][pelX4-1],mc4[pelY4-1][pelX4-1],mc4[pelY4-1][pelX4+1],
+                    pelY4,pelX4,resH,posY,posX,frame,4);
+                    mc4[pelY4][pelX4] = dBestPUCost;
+//                    cout<< "pelY4:" << pelY4 << " pelX4:" << pelX4 << " offset:" << uiPartOffset <<endl;
+                break;
+                case 1:
+                    pelX4 += 1;
+                    collectIntraData(m4,calculateVar(pcCU),uiBestPUMode,dBestPUCost,mc4[pelY4][pelX4],
+                    mc4[pelY4-1][pelX4],mc4[pelY4][pelX4-1],mc4[pelY4-1][pelX4-1],mc4[pelY4-1][pelX4+1],
+                    pelY4,pelX4,resH,posY,posX,frame,4);
+                    mc4[pelY4][pelX4] = dBestPUCost;
+//                    cout<< "pelY4:" << pelY4 << " pelX4:" << pelX4 << " offset:" << uiPartOffset <<endl;
+                break;
+                case 2:
+                    pelY4 += 1;
+                    collectIntraData(m4,calculateVar(pcCU),uiBestPUMode,dBestPUCost,mc4[pelY4][pelX4],
+                    mc4[pelY4-1][pelX4],mc4[pelY4][pelX4-1],mc4[pelY4-1][pelX4-1],mc4[pelY4-1][pelX4+1],
+                    pelY4,pelX4,resH,posY,posX,frame,4);
+                    mc4[pelY4][pelX4] = dBestPUCost;
+//                    cout<< "pelY4:" << pelY4 << " pelX4:" << pelX4 << " offset:" << uiPartOffset <<endl;
+                break;
+                case 3:
+                    pelY4 += 1; pelX4 += 1;
+                    collectIntraData(m4,calculateVar(pcCU),uiBestPUMode,dBestPUCost,mc4[pelY4][pelX4],
+                    mc4[pelY4-1][pelX4],mc4[pelY4][pelX4-1],mc4[pelY4-1][pelX4-1],mc4[pelY4-1][pelX4+1],
+                    pelY4,pelX4,resH,posY,posX,frame,4);
+                    mc4[pelY4][pelX4] = dBestPUCost;
+//                    cout<< "pelY4:" << pelY4 << " pelX4:" << pelX4 << " offset:" << uiPartOffset <<endl;
+                break;
+            }                                                                      
+            //cout<< "PelY4:" << pelY/4 << " PelX4:" << pelX/4 << " ctuY:" << ctuY/4 << " ctuX:" << ctuX/4 <<endl;
             break;
     }
     /**************End intradata class**********************/
@@ -5850,4 +5903,56 @@ Void  TEncSearch::setWpScalingDistParam( TComDataCU* pcCU, Int iRefIdx, RefPicLi
   }
 }
 
-//! \}
+// This function calculates the variance of luma samples in currCU using samplesMatrix - by IagoStorch
+float calculateVar(TComDataCU* currCU){
+    int currX, currY;
+    int currDepth, dimension;
+
+    // Determines boundaries and dimensions of currCU
+    currX = currCU->getCUPelX();
+    currY = currCU->getCUPelY();
+    currDepth = currCU->getDepth(0);
+    dimension = 1 << (6-currDepth);
+
+    float sum = 0.0;
+
+    // Sums all samples inside the CU
+    for(int i=currY; i<currY+dimension; i++){
+        for(int j=currX; j<currX+dimension; j++){
+            sum = sum + samplesMatrix[i][j];
+        }
+    }
+
+    float average = sum/(dimension*dimension);
+    float variance = 0.0;
+
+    // Variance calculation consiering samples values and average
+    for(int i=currY; i<currY+dimension; i++){
+        for(int j=currX; j<currX+dimension; j++){
+            variance = variance + pow(samplesMatrix[i][j]-average, 2);
+        }
+    }
+    variance = variance/(dimension*dimension-1);
+
+    return variance;
+}
+
+void collectIntraData(IntraData m[][mSizeX], Double var, int bestMode, Double bestCost, Double coCost, Double aCost,
+        Double lCost, Double alCost, Double arCost, int pelY, int pelX, int resH, int posY, int posX, int frame, int size) {
+    
+    m[pelY][pelX].setPosH(posX);
+    m[pelY][pelX].setPosV(posY);
+    m[pelY][pelX].setFrame(frame);
+    m[pelY][pelX].setSize(size);
+    m[pelY][pelX].setVariance(var);
+    m[pelY][pelX].setBestMode(bestMode);
+    m[pelY][pelX].setBestModeCost(bestCost);
+    m[pelY][pelX].setCoBestModeCost(coCost);
+
+    m[pelY][pelX].setAboveCost(aCost, pelY);
+    m[pelY][pelX].setLeftCost(lCost, pelX);
+    m[pelY][pelX].setAboveLeftCost(alCost, pelX, pelY);
+    m[pelY][pelX].setAboveRightCost(arCost, pelX, pelY, resH);
+
+    m[pelY][pelX].printToCsv(intraDataFile);
+}

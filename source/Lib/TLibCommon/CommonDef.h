@@ -248,8 +248,8 @@ static const UInt LUMA_LEVEL_TO_DQP_LUT_MAXSIZE =                1024; ///< max 
 static const int DM_Y = 100;
 static const int DM_X = 200;
 
-static const int mSizeX = 1024;
-static const int mSizeY = 512;
+static const int mSizeX = 1024; //4096/4 (resH / puSize 4x4)
+static const int mSizeY = 512; //2048/4 (resV / puSize 4x4)
 static const int rmdList = 8;
 static const int mpmList = 3;
 
