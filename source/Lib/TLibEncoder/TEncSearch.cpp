@@ -44,6 +44,7 @@
 #include <math.h>
 #include <cmath>
 #include <limits>
+//adicionar biblioteca time.h
 
 
 extern IntraData m64[mSizeY][mSizeX];
@@ -2310,8 +2311,11 @@ TEncSearch::estIntraPredLumaQT(TComDataCU* pcCU,
 #if DEBUG_INTRA_SEARCH_COSTS
         std::cout << "1st pass mode " << uiMode << " SAD = " << uiSad << ", mode bits = " << iModeBits << ", cost = " << cost << "\n";
 #endif
-
+        //raw modes RD-Cost        
+        
         CandNum += xUpdateCandList( uiMode, cost, numModesForFullRD, uiRdModeList, CandCostList );
+        
+        //cout << "Size:" << uiWidthBit << " mode:" << uiMode << " cost:" << cost << endl; 
       }
 
       //PRINT RMDS
@@ -2325,7 +2329,7 @@ TEncSearch::estIntraPredLumaQT(TComDataCU* pcCU,
     //Frame info, block size, RMD list       
     int pelX = pcCU->getCUPelX();
     int pelY = pcCU->getCUPelY();    
-    
+    //extrair rd costs 
     switch (uiWidthBit){
         case 5:                       
             for(int i = 0; i< numModesForFullRD; i++) 
@@ -2356,7 +2360,7 @@ TEncSearch::estIntraPredLumaQT(TComDataCU* pcCU,
             }
             break;
     }
-    /**************End intradata class**********************/
+    /**********************End intradata class**********************/
       
       if (m_pcEncCfg->getFastUDIUseMPMEnabled())
       {
@@ -2471,7 +2475,34 @@ TEncSearch::estIntraPredLumaQT(TComDataCU* pcCU,
 #if DEBUG_INTRA_SEARCH_COSTS
       std::cout << "2nd pass [luma,chroma] mode [" << Int(pcCU->getIntraDir(CHANNEL_TYPE_LUMA, uiPartOffset)) << "," << Int(pcCU->getIntraDir(CHANNEL_TYPE_CHROMA, uiPartOffset)) << "] cost = " << dPUCost << "\n";
 #endif
-
+    
+    //new rd-cost   
+    //cout << "Size:" << uiWidthBit << " mode:" << uiOrgMode << " cost:" << dPUCost << " numModes:" << numModesForFullRD << endl; 
+      
+    int pelX = pcCU->getCUPelX();
+    int pelY = pcCU->getCUPelY(); 
+    
+    switch (uiWidthBit){
+        case 5:                       
+            m64[pelY/64][pelX/64].setRmdCostList(uiOrgMode, dPUCost); //RMD rd-cost list
+            break;
+        case 4:                       
+            m32[pelY/32][pelX/32].setRmdCostList(uiOrgMode, dPUCost); //RMD rd-cost list
+            break;
+        case 3:                        
+            m16[pelY/16][pelX/16].setRmdCostList(uiOrgMode, dPUCost); //RMD rd-cost list
+            break;
+        case 2:                                    
+            m8[pelY/8][pelX/8].setRmdCostList(uiOrgMode, dPUCost); //RMD rd-cost list
+            break;   
+        case 1:                                    
+            m4[pelY/4][pelX/4].setRmdCostList(uiOrgMode, dPUCost); //RMD rd-cost list
+            m4[pelY/4][(pelX/4)+1].setRmdCostList(uiOrgMode, dPUCost); //RMD rd-cost list
+            m4[(pelY/4)+1][pelX/4].setRmdCostList(uiOrgMode, dPUCost); //RMD rd-cost list
+            m4[(pelY/4)+1][(pelX/4)+1].setRmdCostList(uiOrgMode, dPUCost); //RMD rd-cost list
+            break;
+    }
+    
       // check r-d cost
       if( dPUCost < dBestPUCost )
       {
@@ -2551,7 +2582,7 @@ TEncSearch::estIntraPredLumaQT(TComDataCU* pcCU,
       Double     dPUCost   = 0.0;
 
       xRecurIntraCodingLumaQT( pcOrgYuv, pcPredYuv, pcResiYuv, resiLumaPU, uiPUDistY, false, dPUCost, tuRecurseWithPU DEBUG_STRING_PASS_INTO(sModeTree));
-
+        
       // check r-d cost
       if( dPUCost < dBestPUCost )
       {

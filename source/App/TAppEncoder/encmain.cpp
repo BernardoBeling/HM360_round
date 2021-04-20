@@ -78,7 +78,9 @@ int main(int argc, char* argv[])
   
   intraDataFile.open("intraDataFile.csv");
   intraDataFile << "Frame,PosY,PosX,Size,BestMode,BestModeCost,Variance,coCost,AboveCost,LeftCost,AboveLeftCost,AboveRightCost,"
-          "MPM1,MPM2,MPM3,RMD1,RMD2,RMD3,RMD4,RMD5,RMD6,RMD7,RMD8" << endl;
+          "MPM1,MPM2,MPM3,RMD1,RMD2,RMD3,RMD4,RMD5,RMD6,RMD7,RMD8,Cost0,Cost1,Cost2,Cost3,Cost4,Cost5,Cost6,Cost7,Cost8,"
+          "Cost9,Cost10,Cost11,Cost12,Cost13,Cost14,Cost15,Cost16,Cost17,Cost18,Cost19,Cost20,Cost21,Cost22,Cost23,"
+          "Cost24,Cost25,Cost26,Cost27,Cost28,Cost29,Cost30,Cost31,Cost32,Cost33,Cost34" << endl;
   
   TAppEncTop  cTAppEncTop;
   

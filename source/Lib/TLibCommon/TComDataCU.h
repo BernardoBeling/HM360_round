@@ -72,6 +72,7 @@ private:
     Int m_frame;  //Block current frame
     Int m_rmdList[rmdList] = {-1,-1,-1,-1,-1,-1,-1,-1};     //Block RMD modes list
     Int m_mpmList[mpmList] = {-1,-1,-1};     //Block MPMs list
+    Double m_rmdCostList[35] = {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};     //Block RMD Rd-Cost list
     Double m_bestModeCost;     //Block best prediction mode RD-Cost
     Double m_coBestModeCost;    //Co-located block best prediction mode RD-Cost
     Double m_aboveCost;    //Above left block best prediction mode RD-Cost
@@ -145,7 +146,8 @@ public:
         m_aboveRightCost = aboveRightCost;  
     }
     void setRmdList (int mode, int i){    m_rmdList[i] = mode;  }
-    void setMpmList (int mode, int i){    m_mpmList[i] = mode;  }
+    void setMpmList (int mode, int i){    m_mpmList[i] = mode;  }  
+    void setRmdCostList (int mode, Double cost){    m_rmdCostList[mode] = cost;  }
     void printToCsv(ofstream& file){
         file << m_frame << "," << m_posV << "," << m_posH 
             << "," << m_size << "," << m_bestMode << "," 
@@ -156,6 +158,8 @@ public:
             file << m_mpmList[i] << ",";
         for(int i=0; i<rmdList; i++)
             file << m_rmdList[i] << ",";
+        for(int i=0; i<35; i++)
+            file << m_rmdCostList[i] << ",";
 
         file << endl;
     }
